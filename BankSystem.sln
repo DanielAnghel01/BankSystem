@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35913.81 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "banksystem.client", "banksystem.client\banksystem.client.esproj", "{28135943-CE3A-9E66-D0A2-1AC9A349F4DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankSystem.Server", "BankSystem.Server\BankSystem.Server.csproj", "{856E9E4E-FC69-40CC-9266-380FDEC401FC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{28135943-CE3A-9E66-D0A2-1AC9A349F4DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28135943-CE3A-9E66-D0A2-1AC9A349F4DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28135943-CE3A-9E66-D0A2-1AC9A349F4DA}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{28135943-CE3A-9E66-D0A2-1AC9A349F4DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28135943-CE3A-9E66-D0A2-1AC9A349F4DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28135943-CE3A-9E66-D0A2-1AC9A349F4DA}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{856E9E4E-FC69-40CC-9266-380FDEC401FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{856E9E4E-FC69-40CC-9266-380FDEC401FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{856E9E4E-FC69-40CC-9266-380FDEC401FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{856E9E4E-FC69-40CC-9266-380FDEC401FC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {ADFA34A7-1206-4E11-BD2F-46C976C2084C}
+	EndGlobalSection
+EndGlobal
