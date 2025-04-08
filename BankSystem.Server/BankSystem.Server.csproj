@@ -29,9 +29,6 @@
 
 	<Target Name="BuildAngular" BeforeTargets="Build">
 		
-		<!-- Clean wwwroot -->
-		<RemoveDir Directories="$(SpaRoot)\..\banksystem.server\wwwroot" />
-		
 		<!-- Install dependencies -->
 		<Exec Command="npm install" WorkingDirectory="$(SpaRoot)" />
 
