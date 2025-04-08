@@ -35,6 +35,9 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
+      - name: Build .NET App
+        run: dotnet build ./BankSystem.Server/BankSystem.Server.csproj
+
       - name: Publish .NET App (includes Angular)
         run: dotnet publish ./BankSystem.Server/BankSystem.Server.csproj -c Release -o ${{ env.PUBLISH_DIR }}
 
