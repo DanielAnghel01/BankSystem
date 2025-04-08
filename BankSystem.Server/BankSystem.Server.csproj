@@ -23,4 +23,10 @@
     </ProjectReference>
   </ItemGroup>
 
+<Target Name="BuildAngular" BeforeTargets="Build">
+  <Exec Command="npm install" WorkingDirectory="$(SpaRoot)" />
+  <Exec Command="npm run build -- --output-path=../banksystem.server/wwwroot" WorkingDirectory="$(SpaRoot)" />
+</Target>
+
+
 </Project>
