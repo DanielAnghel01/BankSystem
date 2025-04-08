@@ -12,11 +12,7 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 app.UseDefaultFiles();
-app.UseStaticFiles( new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "browser")),
-    RequestPath = "", // This means files will be served at the root level, e.g., /index.html
-});
+app.UseStaticFiles();
 
 app.MapStaticAssets();
 
