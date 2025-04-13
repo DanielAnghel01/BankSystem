@@ -8,32 +8,44 @@ on:
     branches:
       - master
   workflow_dispatch:
-
+  
+env:
+  DOTNET_VERSION: '9.0.x'
+  NODE_VERSION: '18'
+  AZURE_WEBAPP_NAME: 'banktest'
+  PUBLISH_DIR: './publish'
+  
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read #This is required for actions/checkout
+      contents: read
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Set up .NET Core
+      - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.x'
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+      - name: Build .NET App
+        run: dotnet build ./BankSystem.Server/BankSystem.Server.csproj
 
-      - name: Upload artifact for deployment job
+      - name: Publish .NET App (includes Angular)
+        run: dotnet publish ./BankSystem.Server/BankSystem.Server.csproj -c Release -o ${{ env.PUBLISH_DIR }}
+
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          name: app
+          path: ${{ env.PUBLISH_DIR }}
 
   deploy:
     runs-on: ubuntu-latest
