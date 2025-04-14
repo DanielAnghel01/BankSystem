@@ -1,11 +1,23 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35913.81 d17.13
+VisualStudioVersion = 17.13.35913.81
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "banksystem.client", "banksystem.client\banksystem.client.esproj", "{28135943-CE3A-9E66-D0A2-1AC9A349F4DA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankSystem.Server", "BankSystem.Server\BankSystem.Server.csproj", "{856E9E4E-FC69-40CC-9266-380FDEC401FC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BankSystem.Server.Services", "BankSystem.Server.Services", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BankSystem.Server.Domain", "BankSystem.Server.Domain", "{6A1FF2A0-1992-4C73-B0D8-D58A261B0B5E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BankSystem.Server.Infrastructure.DataAccess", "BankSystem.Server.Infrastructure.DataAccess", "{9621FFF5-AF3D-46E1-92B2-F45F7E0AE1DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankSystem.Server.Domain", "BankSystem.Server.Domain\BankSystem.Server.Domain.csproj", "{92923505-7C71-481B-9CD9-B150A0C932EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankSystem.Server.Infrastructure.DataAccess", "BankSystem.Server.Infrastructure.DataAccess\BankSystem.Server.Infrastructure.DataAccess.csproj", "{175E6E88-CA92-40E6-BF82-C5A944562852}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BankSystem.Server.Services", "BankSystem.Server.Services\BankSystem.Server.Services.csproj", "{73B05F76-D8C8-4420-A88A-7C69CF6A3393}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,9 +35,26 @@ Global
 		{856E9E4E-FC69-40CC-9266-380FDEC401FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{856E9E4E-FC69-40CC-9266-380FDEC401FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{856E9E4E-FC69-40CC-9266-380FDEC401FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92923505-7C71-481B-9CD9-B150A0C932EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92923505-7C71-481B-9CD9-B150A0C932EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92923505-7C71-481B-9CD9-B150A0C932EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92923505-7C71-481B-9CD9-B150A0C932EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{175E6E88-CA92-40E6-BF82-C5A944562852}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{175E6E88-CA92-40E6-BF82-C5A944562852}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{175E6E88-CA92-40E6-BF82-C5A944562852}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{175E6E88-CA92-40E6-BF82-C5A944562852}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73B05F76-D8C8-4420-A88A-7C69CF6A3393}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73B05F76-D8C8-4420-A88A-7C69CF6A3393}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73B05F76-D8C8-4420-A88A-7C69CF6A3393}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73B05F76-D8C8-4420-A88A-7C69CF6A3393}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{92923505-7C71-481B-9CD9-B150A0C932EF} = {6A1FF2A0-1992-4C73-B0D8-D58A261B0B5E}
+		{175E6E88-CA92-40E6-BF82-C5A944562852} = {9621FFF5-AF3D-46E1-92B2-F45F7E0AE1DA}
+		{73B05F76-D8C8-4420-A88A-7C69CF6A3393} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ADFA34A7-1206-4E11-BD2F-46C976C2084C}

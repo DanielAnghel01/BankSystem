@@ -1,0 +1,39 @@
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../../../enviroments/enviroment';
+import { LoginModel } from '../models/login.model';
+import { TokenModel } from '../models/token.model';
+import { Response } from '../../../core/models/response.model';
+import { LocalStorageService } from '../service/storage.service';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthorizeService {
+  private apiUrl = 'https://bank-system-web.azurewebsites.net/api/';
+
+  constructor(
+    private httpClient: HttpClient,
+    private localStorageService: LocalStorageService
+  ){
+    this.apiUrl = environment.apiUrl + 'authorize/login';
+  }
+
+  login(loginModel: LoginModel): Promise<Response<TokenModel>> {
+    return new Promise((resolve, reject) => {
+      this.httpClient.post(this.apiUrl, loginModel)
+        .toPromise()
+        .then((result: any) => {
+          resolve(result);
+        },
+          (error) => {
+            reject(error);
+          }
+        );
+    });
+  }
+
+  signOut() {
+    this.localStorageService.remove('SESION_TOKEN');
+  }
+}
