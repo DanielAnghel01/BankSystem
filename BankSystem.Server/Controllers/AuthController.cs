@@ -4,6 +4,7 @@ using BankSystem.Server.Services.Dtos;
 using BankSystem.Server.Services.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using Microsoft.AspNetCore.Cors;
 
 namespace BankSystem.Server.Controllers
 {
@@ -18,9 +19,10 @@ namespace BankSystem.Server.Controllers
             _mapper = mapper;
         }
 
+        [EnableCors("AllowAll")]
         [HttpPost]
         [Route("api/auth/login")]
-        public async Task<IActionResult> Login(LoginDto loginDto)
+        public async Task<IActionResult> Login([FromBody]LoginDto loginDto)
         {
             var result = await _authService.Login(_mapper.Map<LoginServiceDto>(loginDto));
             if (result.StatusCode == (int)HttpStatusCode.OK)
