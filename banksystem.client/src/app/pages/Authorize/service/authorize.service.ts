@@ -10,21 +10,25 @@ import { LocalStorageService } from '../service/storage.service';
   providedIn: 'root'
 })
 export class AuthorizeService {
-  private apiUrl = 'https://bank-system-web.azurewebsites.net/api/';
+  private apiUrl = 'https://localhost:7022/api/';
 
   constructor(
     private httpClient: HttpClient,
     private localStorageService: LocalStorageService
   ){
-    this.apiUrl = environment.apiUrl + 'authorize/login';
+    this.apiUrl = environment.apiUrl + 'auth/login';
   }
 
   login(loginModel: LoginModel): Promise<Response<TokenModel>> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
     return new Promise((resolve, reject) => {
-      this.httpClient.post(this.apiUrl, loginModel)
+      this.httpClient.post(this.apiUrl, loginModel, {headers})
         .toPromise()
         .then((result: any) => {
           resolve(result);
+          console.log(result);
         },
           (error) => {
             reject(error);

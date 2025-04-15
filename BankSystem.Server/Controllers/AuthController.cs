@@ -19,7 +19,6 @@ namespace BankSystem.Server.Controllers
             _mapper = mapper;
         }
 
-        [EnableCors("AllowAll")]
         [HttpPost]
         [Route("api/auth/login")]
         public async Task<IActionResult> Login([FromBody]LoginDto loginDto)
@@ -27,7 +26,7 @@ namespace BankSystem.Server.Controllers
             var result = await _authService.Login(_mapper.Map<LoginServiceDto>(loginDto));
             if (result.StatusCode == (int)HttpStatusCode.OK)
             {
-                return Ok(result.Content);
+                return Ok(result);
             }
             else
             {

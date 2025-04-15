@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://bank-system-web.azurewebsites.net/api/'
+  apiUrl: 'https://localhost:7022/api/'
 }

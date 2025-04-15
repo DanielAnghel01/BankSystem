@@ -12,6 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
+import { HttpStatusCode } from '@angular/common/http';
 
 @Component({
   standalone: true,
@@ -73,12 +74,14 @@ export class LoginComponent implements OnInit {
       //this.progressBar.mode = 'indeterminate';
 
       this.authorizeService.login(loginModel).then((response: Response<TokenModel>) => {
-        if (response.isSuccess) {
+        if (response.statusCode == HttpStatusCode.Ok) {
+          console.log(response);
           this.errorMessage = '';
-          const isSaved: boolean = this.saveDataToLocalStorage(response.content.token);
-          if (isSaved) {
-            this.router.navigate(['home']);
-          }
+          //const isSaved: boolean = this.saveDataToLocalStorage(response.content.token);
+          //console.log(isSaved);
+          //if (isSaved) {
+           this.router.navigate(['home']);
+          //}
           //this.progressBar.mode = 'determinate';
         }
       }).catch((response: any) => {
