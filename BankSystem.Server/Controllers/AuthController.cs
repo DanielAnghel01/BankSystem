@@ -21,7 +21,7 @@ namespace BankSystem.Server.Controllers
         }
 
         [HttpPost]
-        [Route("api/auth/login")]
+        [Route("api/authorize/login")]
         public async Task<IActionResult> Login([FromBody]LoginDto loginDto)
         {
             var result = await _authService.Login(_mapper.Map<LoginServiceDto>(loginDto));
