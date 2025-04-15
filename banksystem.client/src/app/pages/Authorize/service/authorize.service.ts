@@ -10,7 +10,7 @@ import { LocalStorageService } from '../service/storage.service';
   providedIn: 'root'
 })
 export class AuthorizeService {
-  private apiUrl = 'https://localhost:7022/api/';
+  private apiUrl = 'https://bank-system-web.azurewebsites.net/api/';
 
   constructor(
     private httpClient: HttpClient,
