@@ -16,7 +16,7 @@ export class AuthorizeService {
     private httpClient: HttpClient,
     private localStorageService: LocalStorageService
   ){
-    this.apiUrl = environment.apiUrl + 'auth/login';
+    this.apiUrl = environment.apiUrl;
   }
 
   login(loginModel: LoginModel): Promise<Response<TokenModel>> {
