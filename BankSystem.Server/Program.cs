@@ -12,7 +12,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAngularDev", policy =>
     {
         policy.WithOrigins(
-            "https://bank-system-web.azurewebsites.net"
+            "https://bank-system-web.azurewebsites.net",
+            "https://localhost:57322"
             ) // Your Angular dev server
               .AllowAnyHeader()
               .AllowAnyMethod()
