@@ -11,6 +11,7 @@ import { LocalStorageService } from '../service/storage.service';
 })
 export class AuthorizeService {
   private apiUrl = 'https://bank-system-web.azurewebsites.net/api/auth/login';
+  private apiUrlRegister = 'https://bank-system-web.azurewebsites.net/api/auth/register';
 
   constructor(
     private httpClient: HttpClient,
@@ -18,6 +19,11 @@ export class AuthorizeService {
   ){
     this.apiUrl = environment.apiUrl;
   }
+
+  register(data: any): Promise<any> {
+    return this.httpClient.post('https://localhost:7022/api/auth/register', data).toPromise(); // Adjust endpoint as needed
+  }
+
 
   login(loginModel: LoginModel): Promise<Response<TokenModel>> {
     const headers = new HttpHeaders({

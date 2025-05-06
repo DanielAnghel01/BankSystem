@@ -5,6 +5,7 @@ using BankSystem.Server.Services.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Identity;
 
 namespace BankSystem.Server.Controllers
 {
@@ -12,12 +13,34 @@ namespace BankSystem.Server.Controllers
     {
         private readonly AuthService _authService;
         private readonly IMapper _mapper;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public AuthController(AuthService authService, IMapper mapper)
+        public AuthController(AuthService authService, IMapper mapper, UserManager<IdentityUser> userManager)
         {
             _authService = authService;
             _mapper = mapper;
+            _userManager = userManager;
+        }
 
+        [HttpPost("api/auth/register")]
+        public async Task<IActionResult> Register([FromBody] RegisterDto dto)
+        {
+            // Example logic - adjust based on your setup
+            if (string.IsNullOrEmpty(dto.Username) || string.IsNullOrEmpty(dto.Password))
+                return BadRequest("Username and password are required.");
+
+            var user = new IdentityUser
+            {
+                UserName = dto.Username,
+                Email = dto.Email
+            };
+
+            var result = await _userManager.CreateAsync(user, dto.Password);
+
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
+
+            return Ok(new { message = "Registration successful" });
         }
 
         [HttpPost]
