@@ -2,6 +2,8 @@ using BankSystem.Server.Infrastructure.DataAccess;
 using BankSystem.Server.Services.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +30,10 @@ builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<RequestService>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<BankDbContext>()
+    .AddDefaultTokenProviders();
+
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddDbContext<BankDbContext>(options =>
 {

@@ -10,7 +10,7 @@ import { LocalStorageService } from '../service/storage.service';
   providedIn: 'root'
 })
 export class AuthorizeService {
-  private apiUrl = 'https://bank-system-web.azurewebsites.net/api/auth/login';
+  private apiUrl = 'https://localhost:7022/api/auth/login';
   private apiUrlRegister = 'https://bank-system-web.azurewebsites.net/api/auth/register';
 
   constructor(
@@ -18,10 +18,36 @@ export class AuthorizeService {
     private localStorageService: LocalStorageService
   ){
     this.apiUrl = environment.apiUrl;
+    this.apiUrlRegister = environment.apiUrlRegister;
   }
 
   register(data: any): Promise<any> {
-    return this.httpClient.post('https://localhost:7022/api/auth/register', data).toPromise(); // Adjust endpoint as needed
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+  //  return this.httpClient.post('https://localhost:7022/api/auth/register', data, {headers})
+  //    .toPromise()
+  //    .then((result: any) => {
+  //      resolve(result);
+  //      console.log(result);
+  //    },
+  //      (error) => {
+  //        reject(error);
+  //      }
+  //    );
+    //});
+    return new Promise((resolve, reject) => {
+      this.httpClient.post(this.apiUrlRegister, data, { headers })
+        .toPromise()
+        .then((result: any) => {
+          resolve(result);
+          console.log(result);
+        },
+          (error) => {
+            reject(error);
+          }
+        );
+    });
   }
 
 
