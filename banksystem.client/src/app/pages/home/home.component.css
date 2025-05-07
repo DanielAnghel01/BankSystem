@@ -1,44 +1,42 @@
 .app-container {
   height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
-
-.app-sidenav {
-  width: 250px;
-  background: #0d47a1;
-  color: white;
-  padding: 16px;
-}
-
-.app-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-mat-nav-list a {
-  color: white;
-  text-decoration: none;
-  margin-bottom: 10px;
-}
-
-  mat-nav-list a:hover {
-    background: rgba(255, 255, 255, 0.1);
-  }
 
 .app-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  background: #0d47a1;
+  color: white;
   position: sticky;
   top: 0;
   z-index: 1000;
 }
 
-.app-page-title {
-  font-size: 20px;
-  font-weight: 500;
+.app-title {
+  font-size: 24px;
+  font-weight: bold;
 }
 
-.spacer {
-  flex: 1 1 auto;
+.nav-list {
+  display: flex;
+  list-style-type: none;
+  margin: 0;
 }
+
+  .nav-list a {
+    color: white;
+    text-decoration: none;
+    margin-right: 20px;
+    padding: 10px;
+  }
+
+    .nav-list a:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
 
 .app-main {
   padding: 20px;
@@ -52,3 +50,30 @@ mat-nav-list a {
   padding: 10px;
   font-size: 14px;
 }
+
+.auth-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+  .auth-buttons button {
+    margin-left: 10px;
+  }
+
+/* Styles for Log In and Register buttons */
+button.mat-button {
+  font-size: 16px;
+  margin-left: 10px;
+}
+
+.logInReg-btn {
+  background-color: green;
+  color: white;
+  border-radius: 4px;
+  padding: 10px 20px;
+}
+
+  .logInReg-btn:hover {
+    background-color: darkgreen;
+  }
+

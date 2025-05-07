@@ -9,18 +9,49 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace BankSystem.Server.Services.Services
-{
+{   
     public class AuthService
     {
         private readonly BankDbContext _bankRepository;
         private readonly IMapper _mapper;
-        public AuthService(BankDbContext bankRepository, IMapper mapper)
+        private readonly UserManager<IdentityUser> _userManager;
+        public AuthService(BankDbContext bankRepository, IMapper mapper, UserManager<IdentityUser> userManager)
         {
             _bankRepository = bankRepository;
             _mapper = mapper;
+            _userManager = userManager;
         }
+
+        public async Task<(bool isSuccessful, object result)> RegisterAsync(RegisterServiceDto registerServiceDto)
+        {
+            // Basic validation
+            if (string.IsNullOrWhiteSpace(registerServiceDto.Username) ||
+                string.IsNullOrWhiteSpace(registerServiceDto.Password))
+            {
+                return (false, "All fields are required.");
+            }
+
+            // Create user
+            var user = new IdentityUser
+            {
+                UserName = registerServiceDto.Username,
+                Email = registerServiceDto.Email
+            };
+
+            var result = await _userManager.CreateAsync(user, registerServiceDto.Password);
+
+            if (!result.Succeeded)
+            {
+                var errors = result.Errors.Select(e => e.Description).ToList();
+                return (false, errors);  // Return only error descriptions
+            }
+
+            return (true, new { message = "Registration successful" });
+        }
+
 
         public async Task<HttpResult> Login(LoginServiceDto loginServiceDto)
         {

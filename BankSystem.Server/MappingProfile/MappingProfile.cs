@@ -10,6 +10,7 @@ namespace BankSystem.Server.MappingProfile
         {
             // CreateMap<Source, Destination>();
             CreateMap<LoginDto, LoginServiceDto>();
+            CreateMap<RegisterDto, RegisterServiceDto>();
         }
     }
 }

@@ -5,46 +5,50 @@ using BankSystem.Server.Services.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Identity;
+
 
 namespace BankSystem.Server.Controllers
 {
+    [ApiController]
+    [Route("api/auth")]
     public class AuthController : ControllerBase
     {
         private readonly AuthService _authService;
         private readonly IMapper _mapper;
-        private readonly UserManager<IdentityUser> _userManager;
 
-        public AuthController(AuthService authService, IMapper mapper, UserManager<IdentityUser> userManager)
+        public AuthController(AuthService authService, IMapper mapper)
         {
             _authService = authService;
             _mapper = mapper;
-            _userManager = userManager;
         }
 
-        [HttpPost("api/auth/register")]
-        public async Task<IActionResult> Register([FromBody] RegisterDto dto)
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterServiceDto RegisterDto)
         {
-            // Example logic - adjust based on your setup
-            if (string.IsNullOrEmpty(dto.Username) || string.IsNullOrEmpty(dto.Password))
-                return BadRequest("Username and password are required.");
-
-            var user = new IdentityUser
+            if (!ModelState.IsValid)
             {
-                UserName = dto.Username,
-                Email = dto.Email
-            };
+                foreach (var state in ModelState)
+                {
+                    foreach (var error in state.Value.Errors)
+                    {
+                        Console.WriteLine($"Validation Error in {state.Key}: {error.ErrorMessage}");
+                    }
+                }
+                return BadRequest(ModelState);  // Return all validation errors
+            }
 
-            var result = await _userManager.CreateAsync(user, dto.Password);
+            var (isSuccessful, result) = await _authService.RegisterAsync(_mapper.Map<RegisterServiceDto>(RegisterDto));
 
-            if (!result.Succeeded)
-                return BadRequest(result.Errors);
+            if (!isSuccessful)
+            {
+                Console.WriteLine($"Registration failed: {result}");
+                return BadRequest(result);
+            }
 
-            return Ok(new { message = "Registration successful" });
+            return Ok(result);
         }
 
-        [HttpPost]
-        [Route("api/auth/login")]
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody]LoginDto loginDto)
         {
             var result = await _authService.Login(_mapper.Map<LoginServiceDto>(loginDto));

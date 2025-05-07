@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../../enviroments/enviroment';
 import { LoginModel } from '../models/login.model';
 import { TokenModel } from '../models/token.model';
+import { RegisterModel } from '../models/register.model';
 import { Response } from '../../../core/models/response.model';
 import { LocalStorageService } from '../service/storage.service';
 
@@ -11,7 +12,7 @@ import { LocalStorageService } from '../service/storage.service';
 })
 export class AuthorizeService {
   private apiUrl = 'https://localhost:7022/api/auth/login';
-  private apiUrlRegister = 'https://bank-system-web.azurewebsites.net/api/auth/register';
+  private apiUrlRegister = 'https://localhost:7022/api/auth/register';
 
   constructor(
     private httpClient: HttpClient,
@@ -21,10 +22,11 @@ export class AuthorizeService {
     this.apiUrlRegister = environment.apiUrlRegister;
   }
 
-  register(data: any): Promise<any> {
+  register(registerModel: RegisterModel): Promise<Response<TokenModel>> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
+    console.log('Register payload:', registerModel);
   //  return this.httpClient.post('https://localhost:7022/api/auth/register', data, {headers})
   //    .toPromise()
   //    .then((result: any) => {
@@ -37,7 +39,7 @@ export class AuthorizeService {
   //    );
     //});
     return new Promise((resolve, reject) => {
-      this.httpClient.post(this.apiUrlRegister, data, { headers })
+      this.httpClient.post(this.apiUrlRegister, registerModel, { headers })
         .toPromise()
         .then((result: any) => {
           resolve(result);
