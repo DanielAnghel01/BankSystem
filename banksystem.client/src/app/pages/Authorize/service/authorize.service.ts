@@ -12,7 +12,7 @@ import { LocalStorageService } from '../service/storage.service';
 })
 export class AuthorizeService {
   private apiUrl = 'https://localhost:7022/api/auth/login';
-  private apiUrlRegister = 'https://localhost:7022/api/auth/register';
+  private apiUrlRegister = 'https://bank-system-web.azurewebsites.net/api/auth/register';
 
   constructor(
     private httpClient: HttpClient,
@@ -27,7 +27,7 @@ export class AuthorizeService {
       'Content-Type': 'application/json'
     });
     console.log('Register payload:', registerModel);
-  //  return this.httpClient.post('https://localhost:7022/api/auth/register', data, {headers})
+  //  return this.httpClient.post('https://localhost:7022/api/auth/register', https://bank-system-web.azurewebsites.net/api/auth/register, data, {headers})
   //    .toPromise()
   //    .then((result: any) => {
   //      resolve(result);

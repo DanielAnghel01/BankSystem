@@ -28,7 +28,7 @@ namespace BankSystem.Server.Infrastructure.DataAccess
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<IdentityUser>(b => { b.ToTable("AspNetUsers", "BANK"); });
+            modelBuilder.Entity<IdentityUser>(b => { b.ToTable("USER", "BANK"); });
             modelBuilder.Entity<IdentityRole>(b => { b.ToTable("AspNetRoles", "BANK"); });
             modelBuilder.Entity<IdentityUserRole<string>>(b => { b.ToTable("AspNetUserRoles", "BANK"); });
             modelBuilder.Entity<IdentityUserClaim<string>>(b => { b.ToTable("AspNetUserClaims", "BANK"); });

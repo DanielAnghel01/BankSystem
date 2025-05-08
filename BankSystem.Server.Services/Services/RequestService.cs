@@ -16,7 +16,7 @@ namespace BankSystem.Server.Services.Services
             _bankRepository = bankRepository;
         }
 
-        public async Task SaveUser (User user)
+        public async Task SaveUser(User user)
         {
             try
             {
@@ -29,6 +29,7 @@ namespace BankSystem.Server.Services.Services
                 throw ex;
             }
         }
+
         public async Task UpdateUser(User user)
         {
             try

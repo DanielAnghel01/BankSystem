@@ -3,13 +3,9 @@ using BankSystem.Server.Infrastructure.DataAccess;
 using BankSystem.Server.Services.Dtos;
 using BankSystem.Server.Services.Utils;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using BankSystem.Server.Domain.Entities;
 
 namespace BankSystem.Server.Services.Services
 {   
@@ -17,17 +13,16 @@ namespace BankSystem.Server.Services.Services
     {
         private readonly BankDbContext _bankRepository;
         private readonly IMapper _mapper;
-        private readonly UserManager<IdentityUser> _userManager;
-        public AuthService(BankDbContext bankRepository, IMapper mapper, UserManager<IdentityUser> userManager)
+        private readonly RequestService _requestService;
+        public AuthService(BankDbContext bankRepository, IMapper mapper, RequestService requestService)
         {
             _bankRepository = bankRepository;
             _mapper = mapper;
-            _userManager = userManager;
+            _requestService = requestService;
         }
 
         public async Task<(bool isSuccessful, object result)> RegisterAsync(RegisterServiceDto registerServiceDto)
         {
-            // Basic validation
             if (string.IsNullOrWhiteSpace(registerServiceDto.Username) ||
                 string.IsNullOrWhiteSpace(registerServiceDto.Password))
             {
@@ -35,18 +30,19 @@ namespace BankSystem.Server.Services.Services
             }
 
             // Create user
-            var user = new IdentityUser
+            var user = new User
             {
-                UserName = registerServiceDto.Username,
+                Username = registerServiceDto.Username,
                 Email = registerServiceDto.Email
             };
 
-            var result = await _userManager.CreateAsync(user, registerServiceDto.Password);
-
-            if (!result.Succeeded)
+            try
             {
-                var errors = result.Errors.Select(e => e.Description).ToList();
-                return (false, errors);  // Return only error descriptions
+                await _requestService.SaveUser(user);
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Error saving user: {ex.Message}");
             }
 
             return (true, new { message = "Registration successful" });

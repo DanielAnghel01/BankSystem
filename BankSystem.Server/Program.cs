@@ -32,7 +32,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<RequestService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddDbContext<BankDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));  // UseNpgsql for PostgreSQL
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))); 
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<BankDbContext>()
