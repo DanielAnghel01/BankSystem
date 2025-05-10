@@ -34,9 +34,6 @@ builder.Services.AddScoped<AuthService>();
 builder.Services.AddDbContext<BankDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))); 
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<BankDbContext>()
-    .AddDefaultTokenProviders();
 builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddDbContext<BankDbContext>(options =>
