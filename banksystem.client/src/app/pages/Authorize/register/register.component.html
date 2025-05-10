@@ -12,6 +12,13 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Date of Birth</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" required />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
       <mat-label>Username</mat-label>
       <input matInput formControlName="username" required />
     </mat-form-field>
@@ -25,6 +32,20 @@
       <mat-label>Confirm Password</mat-label>
       <input matInput type="password" formControlName="confirmPassword" required />
     </mat-form-field>
+
+    <!--<div *ngIf="registrationError" class="error-message">
+      <mat-card class="mat-elevation-z2" style="padding: 10px; background-color: #ffe6e6;">
+        <p>{{ registrationError }}</p>
+      </mat-card>
+    </div>
+
+    <div *ngIf="registrationErrorList?.length" class="error-message">
+      <mat-card class="mat-elevation-z2" style="padding: 10px; background-color: #ffe6e6;">
+        <ul>
+          <li *ngFor="let error of registrationErrorList">{{ error }}</li>
+        </ul>
+      </mat-card>
+    </div>-->
 
     <div *ngIf="errorMessage" class="error-message">
       {{ errorMessage }}

@@ -29,11 +29,18 @@ namespace BankSystem.Server.Services.Services
                 return (false, "All fields are required.");
             }
 
+            var password = registerServiceDto.Password;
+
             // Create user
             var user = new User
             {
                 Username = registerServiceDto.Username,
-                Email = registerServiceDto.Email
+                Email = registerServiceDto.Email,
+                Password = registerServiceDto.Password,
+                FullName = registerServiceDto.FullName,
+                Role = "user",
+                DateOfBirth = registerServiceDto.DateOfBirth,
+                CreatedAt = DateTime.UtcNow
             };
 
             try

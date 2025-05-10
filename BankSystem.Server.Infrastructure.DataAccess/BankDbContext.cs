@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace BankSystem.Server.Infrastructure.DataAccess
 {
-    public class BankDbContext : IdentityDbContext<IdentityUser>
+    public class BankDbContext : DbContext
     {
         public BankDbContext(DbContextOptions<BankDbContext> options) : base(options)
         {
@@ -27,14 +27,6 @@ namespace BankSystem.Server.Infrastructure.DataAccess
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<IdentityUser>(b => { b.ToTable("USER", "BANK"); });
-            modelBuilder.Entity<IdentityRole>(b => { b.ToTable("AspNetRoles", "BANK"); });
-            modelBuilder.Entity<IdentityUserRole<string>>(b => { b.ToTable("AspNetUserRoles", "BANK"); });
-            modelBuilder.Entity<IdentityUserClaim<string>>(b => { b.ToTable("AspNetUserClaims", "BANK"); });
-            modelBuilder.Entity<IdentityUserLogin<string>>(b => { b.ToTable("AspNetUserLogins", "BANK"); });
-            modelBuilder.Entity<IdentityRoleClaim<string>>(b => { b.ToTable("AspNetRoleClaims", "BANK"); });
-            modelBuilder.Entity<IdentityUserToken<string>>(b => { b.ToTable("AspNetUserTokens", "BANK"); });
 
             modelBuilder.HasDefaultSchema("BANK");
             modelBuilder.ApplyConfiguration(new AuditLogTypeConfiguration());

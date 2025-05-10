@@ -10,6 +10,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon'; // Optional, for icons
 import { CommonModule } from '@angular/common';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-register',
@@ -23,7 +25,9 @@ import { CommonModule } from '@angular/common';
     MatInputModule,
     MatButtonModule,
     MatProgressBarModule,
-    MatIconModule
+    MatIconModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ]
 })
 export class RegisterComponent implements OnInit {
@@ -41,6 +45,7 @@ export class RegisterComponent implements OnInit {
     this.registerForm = this.fb.group({
       fullName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
+      dateOfBirth: ['', Validators.required],
       username: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required]
@@ -71,3 +76,4 @@ export class RegisterComponent implements OnInit {
     }
   }
 }
+
