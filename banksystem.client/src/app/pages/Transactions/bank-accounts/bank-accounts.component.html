@@ -1,0 +1,33 @@
+<section class="accounts-section">
+  <h2>Your Bank Accounts</h2>
+  <div class="account-list">
+    <mat-card *ngFor="let account of accounts" class="account-card">
+      <mat-card-title>{{ account.accountType }} - {{ account.currency }}</mat-card-title>
+      <mat-card-content>
+        <p><strong>Account Number:</strong> {{ account.accountNumber }}</p>
+        <p><strong>Balance:</strong> {{ account.currency }} {{ account.balance | number:'1.2-2' }}</p>
+        <p><strong>Created At:</strong> {{ account.createdAt | date:'medium' }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</section>
+
+<h2>Create Bank Account</h2>
+<form (ngSubmit)="createAccount()" #accountForm="ngForm">
+  <mat-form-field appearance="fill">
+    <mat-label>Account Type</mat-label>
+    <input matInput name="accountType" [(ngModel)]="newAccount.accountType" required />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Currency</mat-label>
+    <input matInput name="currency" [(ngModel)]="newAccount.currency" required />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Initial Balance</mat-label>
+    <input matInput type="number" name="balance" [(ngModel)]="newAccount.balance" required />
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit">Create Account</button>
+</form>

@@ -1,44 +1,49 @@
 .app-container {
   height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-.app-sidenav {
-  width: 250px;
+.app-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 30px;
   background: #0d47a1;
   color: white;
-  padding: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  height: 64px;
 }
 
 .app-title {
   font-size: 24px;
   font-weight: bold;
-  margin-bottom: 20px;
+  white-space: nowrap;
 }
 
-mat-nav-list a {
-  color: white;
-  text-decoration: none;
-  margin-bottom: 10px;
+.nav-list {
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+  gap: 20px;
+  list-style: none;
+  margin: 0;
 }
 
-  mat-nav-list a:hover {
-    background: rgba(255, 255, 255, 0.1);
+  .nav-list a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 8px 12px;
+    transition: background 0.3s ease;
   }
 
-.app-toolbar {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
-
-.app-page-title {
-  font-size: 20px;
-  font-weight: 500;
-}
-
-.spacer {
-  flex: 1 1 auto;
-}
+    .nav-list a:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 4px;
+    }
 
 .app-main {
   padding: 20px;
@@ -52,3 +57,116 @@ mat-nav-list a {
   padding: 10px;
   font-size: 14px;
 }
+
+.auth-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+  .auth-buttons button {
+    margin-left: 10px;
+  }
+
+/* Styles for Log In and Register buttons */
+button.mat-button {
+  font-size: 16px;
+  margin-left: 10px;
+}
+
+.logInReg-btn {
+  background-color: limegreen; 
+  color: white;
+  border-radius: 4px;
+  padding: 10px 20px;
+  transition: background-color 0.3s ease;
+  box-shadow: none; /* remove Material shadow */
+}
+
+  .logInReg-btn:hover {
+    background-color: green; 
+  }
+
+/* Hero section */
+.home-hero {
+  text-align: center;
+  padding: 40px 20px;
+  background: linear-gradient(to right, #0d47a1, #1976d2);
+  color: white;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+  .home-hero h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
+  }
+
+  .home-hero p {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+
+.hero-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* Features section */
+.home-features {
+  padding: 20px;
+  background-color: #f0f4f8;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+  .home-features h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: #0d47a1;
+  }
+
+.feature-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.feature-card {
+  padding: 15px;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Why us section */
+.home-why-us {
+  padding: 20px;
+  text-align: center;
+}
+
+  .home-why-us h2 {
+    margin-bottom: 15px;
+    font-size: 26px;
+    color: #0d47a1;
+  }
+
+  .home-why-us ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    max-width: 500px;
+    text-align: left;
+  }
+
+  .home-why-us li {
+    padding: 10px 0;
+    font-size: 18px;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+

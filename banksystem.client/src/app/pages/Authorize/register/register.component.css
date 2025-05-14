@@ -1,0 +1,17 @@
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.register-container {
+  width: 400px;
+  margin: 50px auto;
+  padding: 24px;
+  background-color: #fff;
+  border-radius: 8px;
+}
+
+.error-message {
+  color: red;
+  margin-bottom: 16px;
+}

@@ -1,0 +1,17 @@
+<div class="transaction-form">
+  <h2>Make a Transaction</h2>
+
+  <label for="sender">Sender Account Number</label>
+  <input type="text" id="sender" [(ngModel)]="senderAccountNumber" name="senderAccountNumber" required />
+
+  <label for="receiver">Receiver Account Number</label>
+  <input type="text" id="receiver" [(ngModel)]="reciverAccountNumber" name="reciverAccountNumber" required />
+
+  <label for="amount">Amount</label>
+  <input type="number" id="amount" [(ngModel)]="amount" name="amount" required />
+
+  <label for="details">Details</label>
+  <input type="text" id="details" [(ngModel)]="details" name="details" />
+
+  <button (click)="submit()">Submit</button>
+</div>
