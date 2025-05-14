@@ -27,17 +27,6 @@ export class AuthorizeService {
       'Content-Type': 'application/json'
     });
     console.log('Register payload:', registerModel);
-  //  return this.httpClient.post('https://localhost:7022/api/auth/register', https://bank-system-web.azurewebsites.net/api/auth/register, data, {headers})
-  //    .toPromise()
-  //    .then((result: any) => {
-  //      resolve(result);
-  //      console.log(result);
-  //    },
-  //      (error) => {
-  //        reject(error);
-  //      }
-  //    );
-    //});
     return new Promise((resolve, reject) => {
       this.httpClient.post(this.apiUrlRegister, registerModel, { headers })
         .toPromise()

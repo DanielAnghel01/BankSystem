@@ -43,5 +43,18 @@ namespace BankSystem.Server.Services.Services
                 throw ex;
             }
         }
+
+        public async Task SaveBankAccount(BankAccount account)
+        {
+            try
+            {
+                _bankRepository.BankAccounts.Add(account);
+                await _bankRepository.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

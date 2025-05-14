@@ -31,6 +31,8 @@ builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<RequestService>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<BankAccountService>();
+builder.Services.AddScoped<TransactionService>();
 builder.Services.AddDbContext<BankDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))); 
 

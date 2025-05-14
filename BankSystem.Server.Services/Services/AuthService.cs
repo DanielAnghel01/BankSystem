@@ -21,17 +21,14 @@ namespace BankSystem.Server.Services.Services
             _requestService = requestService;
         }
 
-        public async Task<(bool isSuccessful, object result)> RegisterAsync(RegisterServiceDto registerServiceDto)
+        public async Task<HttpResult> RegisterAsync(RegisterServiceDto registerServiceDto)
         {
             if (string.IsNullOrWhiteSpace(registerServiceDto.Username) ||
                 string.IsNullOrWhiteSpace(registerServiceDto.Password))
             {
-                return (false, "All fields are required.");
+                return HttpResult.Factory.Create(HttpStatusCode.BadRequest, null, "All fields are required.");
             }
 
-            var password = registerServiceDto.Password;
-
-            // Create user
             var user = new User
             {
                 Username = registerServiceDto.Username,
@@ -49,11 +46,12 @@ namespace BankSystem.Server.Services.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Error saving user: {ex.Message}");
+                return HttpResult.Factory.Create(HttpStatusCode.InternalServerError, null, $"Error saving user: {ex.Message}");
             }
 
-            return (true, new { message = "Registration successful" });
+            return HttpResult.Factory.Create(HttpStatusCode.Created, new { message = "Registration successful" });
         }
+
 
 
         public async Task<HttpResult> Login(LoginServiceDto loginServiceDto)

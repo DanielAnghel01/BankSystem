@@ -2,6 +2,8 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './pages/Authorize/login/login.component';
 import { HomeComponent } from './pages/home/home.component';
 import { RegisterComponent } from './pages/Authorize/register/register.component';
+import { BankAccountComponent } from './pages/Transactions/bank-accounts/bank-accounts.component'
+import { TransactionComponent } from './pages/Transactions/transaction/transaction.component'
 
 export const routes: Routes = [
   {
@@ -26,6 +28,18 @@ export const routes: Routes = [
     //component: RegisterComponent,
     loadComponent: () => import('./pages/Authorize/register/register.component').then(m => m.RegisterComponent),
     data: { title: 'Register' }
+  },
+  {
+    path: 'bank-accounts',
+    //component: BankAccountsComponent,
+    loadComponent: () => import('./pages/Transactions/bank-accounts/bank-accounts.component').then(m => m.BankAccountComponent),
+    data: { title: 'BankAccount' }
+  },
+  {
+    path: 'transaction',
+    //component: TransactionComponent,
+    loadComponent: () => import('./pages/Transactions/transaction/transaction.component').then(m => m.TransactionComponent),
+    data: { title: 'Transactions' }
   },
 
   {

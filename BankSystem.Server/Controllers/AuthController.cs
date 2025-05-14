@@ -23,30 +23,16 @@ namespace BankSystem.Server.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterServiceDto RegisterDto)
+        public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
         {
-            if (!ModelState.IsValid)
-            {
-                foreach (var state in ModelState)
-                {
-                    foreach (var error in state.Value.Errors)
-                    {
-                        Console.WriteLine($"Validation Error in {state.Key}: {error.ErrorMessage}");
-                    }
-                }
-                return BadRequest(ModelState);  // Return all validation errors
-            }
+            var result = await _authService.RegisterAsync(_mapper.Map<RegisterServiceDto>(registerDto));
 
-            var (isSuccessful, result) = await _authService.RegisterAsync(_mapper.Map<RegisterServiceDto>(RegisterDto));
+            if (result.StatusCode >= 400)
+                return StatusCode(result.StatusCode, new { error = result.ErrorMessage });
 
-            if (!isSuccessful)
-            {
-                Console.WriteLine($"Registration failed: {result}");
-                return BadRequest(result);
-            }
-
-            return Ok(result);
+            return StatusCode(result.StatusCode, result.Content);
         }
+
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody]LoginDto loginDto)
