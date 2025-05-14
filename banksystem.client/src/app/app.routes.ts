@@ -4,11 +4,12 @@ import { HomeComponent } from './pages/home/home.component';
 import { RegisterComponent } from './pages/Authorize/register/register.component';
 import { BankAccountComponent } from './pages/Transactions/bank-accounts/bank-accounts.component'
 import { TransactionComponent } from './pages/Transactions/transaction/transaction.component'
+import { AuthGuard } from './pages/Authorize/login.guard';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'home',
     pathMatch: 'full'
   },
   {
@@ -33,17 +34,25 @@ export const routes: Routes = [
     path: 'bank-accounts',
     //component: BankAccountsComponent,
     loadComponent: () => import('./pages/Transactions/bank-accounts/bank-accounts.component').then(m => m.BankAccountComponent),
-    data: { title: 'BankAccount' }
+    data: { title: 'BankAccount' },
+    canActivate: [AuthGuard]
   },
   {
     path: 'transaction',
     //component: TransactionComponent,
     loadComponent: () => import('./pages/Transactions/transaction/transaction.component').then(m => m.TransactionComponent),
-    data: { title: 'Transactions' }
+    data: { title: 'Transactions' },
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'user',
+    loadComponent: () => import('./pages/user/user.component').then(m => m.UserComponent),
+    data: { title: 'User' },
+    canActivate: [AuthGuard]
   },
 
   {
     path: '**',
-    redirectTo: 'login'
+    redirectTo: 'home'
   }
 ];

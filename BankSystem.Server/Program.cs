@@ -5,11 +5,37 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 
 var builder = WebApplication.CreateBuilder(args);
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]);
+
 
 // Add services to the container.
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidateAudience = true,
+        ValidAudience = jwtSettings["Audience"],
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key)
+    };
+});
+
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularDev", policy =>
@@ -33,6 +59,7 @@ builder.Services.AddScoped<RequestService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<BankAccountService>();
 builder.Services.AddScoped<TransactionService>();
+builder.Services.AddScoped<UserService>();
 builder.Services.AddDbContext<BankDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))); 
 
@@ -67,5 +94,7 @@ app.MapControllers();
 app.MapFallbackToFile("index.html");
 
 app.UseCors("AllowAngularDev");
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.Run();

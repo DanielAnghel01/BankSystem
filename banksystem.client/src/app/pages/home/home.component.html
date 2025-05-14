@@ -4,11 +4,15 @@
   <nav class="nav-list">
     <a routerLink="/home">🏦 Home</a>
     <a routerLink="/dashboard">📊 Dashboard</a>
-    <a routerLink="/transactions">💳 Transactions</a>
+    <a routerLink="/transaction">💳 Transactions</a>
     <a routerLink="/transfer">💸 Transfer Funds</a>
     <a routerLink="/exchange-rates">📊 Exchange Rates</a>
-    <a routerLink="/profile">👤 Profile</a>
+    <a routerLink="/user">👤 Profile</a>
   </nav>
+
+  <div *ngIf="isLoggedIn()" class="text-white font-bold">
+    👋 Welcome, {{username}}!
+  </div>
 </header>
 
 <!-- Main Body -->
@@ -18,7 +22,7 @@
     <p>Your trusted partner in modern, secure, and efficient banking.</p>
     <div class="hero-buttons">
       <button mat-raised-button class="logInReg-btn" routerLink="/register">Open an Account</button>
-      <button mat-stroked-button class="logInReg-btn" routerLink="/login">Log In</button>
+      <button mat-stroked-button *ngIf="!isLoggedIn()" class="logInReg-btn" routerLink="/login">Log In</button>
     </div>
   </section>
 

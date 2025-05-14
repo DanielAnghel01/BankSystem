@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { TransactionService } from '../services/transaction.service';
 import { FormsModule } from '@angular/forms';
 
+
 @Component({
   standalone: true,
   selector: 'app-transaction',
@@ -10,8 +11,8 @@ import { FormsModule } from '@angular/forms';
   imports: [FormsModule],
 })
 export class TransactionComponent {
-  senderAccountNumber!: number;
-  reciverAccountNumber!: number;
+  senderAccountNumber!: string;
+  reciverAccountNumber!: string;
   amount!: number;
   details: string = '';
   message: string = '';

@@ -1,7 +1,7 @@
 export class TransactionModel {
   id!: number;
-  senderAccountNumber!: number;
-  reciverAccountNumber!: number;
+  senderAccountNumber!: string;
+  reciverAccountNumber!: string;
   amount!: number;
   transactionType!: string;
   date!: string;

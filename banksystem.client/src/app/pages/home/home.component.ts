@@ -5,6 +5,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
+import { AuthorizeService } from '../Authorize/service/authorize.service';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
@@ -18,9 +20,20 @@ import { MatCardModule } from '@angular/material/card';
     MatListModule,
     MatButtonModule,
     RouterModule,
-    MatCardModule
+    MatCardModule,
+    CommonModule
   ]
 })
 export class HomeComponent {
+  username: string | null = null;
 
+  constructor(private authService: AuthorizeService) { }
+
+  ngOnInit(): void {
+    this.username = this.authService.getUsernameFromToken();
+  }
+
+  isLoggedIn(): boolean {
+    return this.authService.isAuthenticated();
+  }
 }

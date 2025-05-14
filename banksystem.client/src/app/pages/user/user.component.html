@@ -1,0 +1,42 @@
+<main class="app-main">
+  <section class="user-profile">
+    <div class="flex justify-between items-center mb-4">
+      <h1>👤 Welcome, {{ user?.fullName }}</h1>
+
+      <button mat-raised-button
+              color="warn"
+              class="logout-btn"
+              (click)="logout()">
+        <mat-icon class="mr-2">logout</mat-icon>
+        Logout
+      </button>
+    </div>
+
+    <mat-card class="profile-card">
+      <mat-card-title>Personal Information</mat-card-title>
+      <mat-card-content>
+        <p><strong>📧 Email:</strong> {{ user?.email }}</p>
+        <p><strong>🧍 Full Name:</strong> {{ user?.fullName }}</p>
+        <p><strong>🎂 Date of Birth:</strong> {{ user?.dateOfBirth | date }}</p>
+      </mat-card-content>
+    </mat-card>
+
+    <section class="bank-accounts mt-6">
+      <h2>🏦 Your Bank Accounts</h2>
+
+      <div *ngIf="bankAccount.length > 0; else noAccounts">
+        <mat-card class="account-card" *ngFor="let account of bankAccount">
+          <mat-card-title>Account #{{ account?.accountNumber }}</mat-card-title>
+          <mat-card-content>
+            <p><strong>💰 Balance:</strong> {{ account?.balance }}</p>
+            <p><strong>🏷️ Type:</strong> {{ account?.accountType }}</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <ng-template #noAccounts>
+        <p>You currently have no bank accounts.</p>
+      </ng-template>
+    </section>
+  </section>
+</main>

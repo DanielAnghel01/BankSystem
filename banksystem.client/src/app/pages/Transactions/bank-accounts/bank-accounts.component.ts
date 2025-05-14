@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card'; 
 import { BankAccountModel } from '../models/bank-account.model';
+import { AuthorizeService } from '../../Authorize/service/authorize.service';
 
 @Component({
   standalone: true,
@@ -29,7 +30,10 @@ import { BankAccountModel } from '../models/bank-account.model';
 export class BankAccountComponent implements OnInit {
   accounts: BankAccountModel[] = [];
 
-  constructor(private bankAccountService: BankAccountService) { }
+  constructor(
+    private bankAccountService: BankAccountService,
+    private authorizeService: AuthorizeService
+  ) { }
 
   ngOnInit(): void {
     this.bankAccountService.getAccounts().subscribe({
@@ -39,7 +43,7 @@ export class BankAccountComponent implements OnInit {
   }
 
   newAccount = {
-    userId: 1, // Replace with actual logic to get the logged-in user's ID
+    userId: 0, // Replace with actual logic to get the logged-in user's ID
     accountType: '',
     currency: '',
     balance: 0,
@@ -49,15 +53,21 @@ export class BankAccountComponent implements OnInit {
 
   createAccount() {
     this.newAccount.accountNumber = this.generateRandomAccountNumber();
+    this.newAccount.userId = this.authorizeService.getIdFromToken();
+    console.log(this.newAccount.userId);
+    if (this.newAccount.userId !== null) {
+      this.bankAccountService.createAccount(this.newAccount).subscribe({
+        next: (res) => {
+          console.log('Account created:', res);
+          this.accounts.push(res); // Optionally update list
+        },
+        error: (err) => console.error('Error creating account', err)
+      });
+    }
+    }
 
-    this.bankAccountService.createAccount(this.newAccount).subscribe({
-      next: (res) => {
-        console.log('Account created:', res);
-        this.accounts.push(res); // Optionally update list
-      },
-      error: (err) => console.error('Error creating account', err)
-    });
-  }
+
+    
 
   generateRandomAccountNumber(): string {
     return Math.floor(100000000 + Math.random() * 900000000).toString();

@@ -6,19 +6,27 @@ using Microsoft.EntityFrameworkCore;
 using System.Net;
 using Microsoft.AspNetCore.Identity;
 using BankSystem.Server.Domain.Entities;
+using System.Text;
+using Microsoft.Extensions.Configuration;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BankSystem.Server.Services.Services
-{   
+{
     public class AuthService
     {
         private readonly BankDbContext _bankRepository;
         private readonly IMapper _mapper;
         private readonly RequestService _requestService;
-        public AuthService(BankDbContext bankRepository, IMapper mapper, RequestService requestService)
+        private readonly IConfiguration _config;
+
+        public AuthService(BankDbContext bankRepository, IMapper mapper, RequestService requestService, IConfiguration config)
         {
             _bankRepository = bankRepository;
             _mapper = mapper;
             _requestService = requestService;
+            _config = config;
         }
 
         public async Task<HttpResult> RegisterAsync(RegisterServiceDto registerServiceDto)
@@ -58,18 +66,46 @@ namespace BankSystem.Server.Services.Services
         {
             try
             {
-                var IsValidUser = await _bankRepository.Users.AnyAsync(u => u.Username == loginServiceDto.UserName && u.Password == loginServiceDto.Password);
+                var user = await _bankRepository.Users.FirstOrDefaultAsync(u => u.Username == loginServiceDto.UserName && u.Password == loginServiceDto.Password);
 
-                if(IsValidUser)
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.UTF8.GetBytes(_config["JwtSettings:Key"]);
+
+                var claims = new[]
                 {
-                    return HttpResult.Factory.Create(HttpStatusCode.OK, "Login succesfully");
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new Claim(ClaimTypes.Name, user.Username),
+                    new Claim(ClaimTypes.Email, user.Email)
+                };
+
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new ClaimsIdentity(claims),
+                    Expires = DateTime.UtcNow.AddMinutes(double.Parse(_config["JwtSettings:ExpireMinutes"])),
+                    Issuer = _config["JwtSettings:Issuer"],
+                    Audience = _config["JwtSettings:Audience"],
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                };
+
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                var jwt = tokenHandler.WriteToken(token);
+
+
+                if (user != null)
+                {
+                    var loginResponse = new LoginResponseServiceDto
+                    {
+                        Username = user.Username,
+                        Token = jwt
+                    };
+                    return HttpResult.Factory.Create(HttpStatusCode.OK, loginResponse);
                 }
                 else
                 {
                     return HttpResult.Factory.Create(HttpStatusCode.BadRequest, null, "Username or Password is incorect");
-                }    
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 //_logger.Error(ex);
                 return HttpResult.Factory.Create(HttpStatusCode.InternalServerError, null, "Internal server error");
