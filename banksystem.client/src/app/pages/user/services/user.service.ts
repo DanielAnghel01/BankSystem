@@ -11,7 +11,7 @@ import { Response } from '../../../core/models/response.model';
 export class UserService {
   user!: User;
   bankAccount!: BankAccount[];
-  private apiUrl = 'https://localhost:7022/api/user/profile';
+  private apiUrl = 'https://bank-system-web.azurewebsites.net/api/user/profile';
   constructor(
     private httpClient: HttpClient,
     private localStorageService: LocalStorageService

@@ -12,7 +12,7 @@ import { jwtDecode } from 'jwt-decode';
   providedIn: 'root'
 })
 export class AuthorizeService {
-  private apiUrl = 'https://localhost:7022/api/auth/login';
+  private apiUrl = 'https://bank-system-web.azurewebsites.net/api/auth/login';
   private apiUrlRegister = 'https://bank-system-web.azurewebsites.net/api/auth/register';
 
   constructor(
