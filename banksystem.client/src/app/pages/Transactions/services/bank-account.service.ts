@@ -7,7 +7,7 @@ import { BankAccountModel } from '../models/bank-account.model';
   providedIn: 'root'
 })
 export class BankAccountService {
-  private apiUrl = 'https://localhost:7022/api/bank-account'; 
+  private apiUrl = 'https://bank-system-web.azurewebsites.net/api/bank-account'; 
 
   constructor(private http: HttpClient) { }
 
