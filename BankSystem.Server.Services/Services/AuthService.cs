@@ -68,6 +68,11 @@ namespace BankSystem.Server.Services.Services
             {
                 var user = await _bankRepository.Users.FirstOrDefaultAsync(u => u.Username == loginServiceDto.UserName && u.Password == loginServiceDto.Password);
 
+                if (user == null)
+                {
+                    return HttpResult.Factory.Create(HttpStatusCode.BadRequest, null, "Username or Password is incorrect");
+                }
+
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.UTF8.GetBytes(_config["JwtSettings:Key"]);
 
@@ -91,19 +96,12 @@ namespace BankSystem.Server.Services.Services
                 var jwt = tokenHandler.WriteToken(token);
 
 
-                if (user != null)
+                var loginResponse = new LoginResponseServiceDto
                 {
-                    var loginResponse = new LoginResponseServiceDto
-                    {
-                        Username = user.Username,
-                        Token = jwt
-                    };
-                    return HttpResult.Factory.Create(HttpStatusCode.OK, loginResponse);
-                }
-                else
-                {
-                    return HttpResult.Factory.Create(HttpStatusCode.BadRequest, null, "Username or Password is incorect");
-                }
+                    Username = user.Username,
+                    Token = jwt
+                };
+                return HttpResult.Factory.Create(HttpStatusCode.OK, loginResponse);
             }
             catch (Exception ex)
             {
