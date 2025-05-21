@@ -95,6 +95,69 @@ namespace UnitTest
             // Assert
             Assert.AreEqual(400, result.StatusCode);
         }
+
+        [TestMethod]
+        public async Task RegisterAsync_WithEmptyUsernameOrPassword_ReturnsBadRequest()
+        {
+            // Arrange
+            var dto = new RegisterServiceDto
+            {
+                Username = "", 
+                Password = "", 
+                Email = "user@example.com",
+                FullName = "Test User",
+                DateOfBirth = DateTime.UtcNow
+            };
+
+            // Act
+            var result = await _authService.RegisterAsync(dto);
+
+            // Assert
+            Assert.AreEqual(400, result.StatusCode);
+            Assert.AreEqual("All fields are required.", result.ErrorMessage);
+        }
+
+        [TestMethod]
+        public async Task RegisterAsync_WhenSaveUserThrowsException_ReturnsInternalServerError()
+        {
+            // Arrange
+            var dto = new RegisterServiceDto
+            {
+                Username = "newuser",
+                Password = "pass123",
+                FullName = "New User",
+                DateOfBirth = DateTime.UtcNow
+            };
+
+            // Act
+            var result = await _authService.RegisterAsync(dto);
+
+            // Assert
+            Assert.AreEqual(500, result.StatusCode);
+            Assert.IsTrue(result.ErrorMessage.StartsWith("Error saving user"));
+        }
+
+
+        [TestMethod]
+        public async Task RegisterAsync_WithValidInput_ReturnsCreated()
+        {
+            // Arrange
+            var dto = new RegisterServiceDto
+            {
+                Username = "validuser",
+                Password = "securepass",
+                Email = "valid@example.com",
+                FullName = "Valid User",
+                DateOfBirth = DateTime.UtcNow
+            };
+
+            // Act
+            var result = await _authService.RegisterAsync(dto);
+
+            // Assert
+            Assert.AreEqual(201, result.StatusCode);
+            Assert.IsTrue(result.Content.ToString().Contains("Registration successful"));
+        }
     }
 
 }
