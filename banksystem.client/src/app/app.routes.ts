@@ -50,6 +50,13 @@ export const routes: Routes = [
     data: { title: 'User' },
     canActivate: [AuthGuard]
   },
+  {
+    path: 'exchange-rates',
+    //component: ExchangeRatesComponent,
+    loadComponent: () => import('./pages/exchange-rates/exchange-rates.component').then(m => m.ExchangeRatesComponent),
+    data: { title: 'Exchange Rates' },
+    canActivate: [AuthGuard]
+  },
 
   {
     path: '**',

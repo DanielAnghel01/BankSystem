@@ -8,6 +8,7 @@
     <BuildOutputFolder>$(MSBuildProjectDirectory)\dist\banksystem.client\browser\</BuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="src\app\pages\exchange-rates\service\" />
     <Folder Include="src\app\pages\Modules\" />
   </ItemGroup>
 </Project>
