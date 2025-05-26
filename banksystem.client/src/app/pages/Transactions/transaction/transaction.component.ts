@@ -63,8 +63,10 @@ export class TransactionComponent {
     console.log(transactionPayload);
     this.transactionService.makeTransfer(transactionPayload).subscribe({
       next: (res) => {
+        alert('Transfer successful!');
         this.message = res.message || 'Transfer successful';
         this.error = '';
+        this.router.navigate(['/user'])
       },
       error: (err) => {
         this.error = err.error?.message || 'Transfer failed';

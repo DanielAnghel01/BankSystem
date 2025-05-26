@@ -6,4 +6,5 @@ export class TransactionHistoryModel {
   amount!: number;
   date!: string;
   description!: string;
+  currency!: string;
 }

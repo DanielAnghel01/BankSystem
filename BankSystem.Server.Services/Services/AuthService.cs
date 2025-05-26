@@ -54,13 +54,12 @@ namespace BankSystem.Server.Services.Services
             }
             catch (Exception ex)
             {
+
                 return HttpResult.Factory.Create(HttpStatusCode.InternalServerError, null, $"Error saving user: {ex.Message}");
             }
 
             return HttpResult.Factory.Create(HttpStatusCode.Created, new { message = "Registration successful" });
         }
-
-
 
         public async Task<HttpResult> Login(LoginServiceDto loginServiceDto)
         {

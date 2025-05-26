@@ -15,5 +15,6 @@ namespace BankSystem.Server.Services.Dtos
         public decimal Amount { get; set; }
         public DateTime Date { get; set; }
         public string description { get; set; }
+        public string Currency { get; set; }
     }
 }

@@ -9,6 +9,10 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using RestSharp;
+using System.Text.Json.Serialization;
+using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace BankSystem.Server.Services.Services
 {
@@ -45,9 +49,24 @@ namespace BankSystem.Server.Services.Services
                 return HttpResult.Factory.Create(HttpStatusCode.BadRequest, null, "Insufficient balance in sender account.");
             }
 
+            var restClient = new RestClient("https://api.frankfurter.app");
+            var restRequest = new RestRequest("/latest", Method.Get);
+
+            restRequest.AddParameter("from", sender.Currency);
+            restRequest.AddParameter("to", receiver.Currency);
+
+            var response = await restClient.ExecuteAsync(restRequest);
+            decimal reciverRate = 1;
+            if (response.StatusCode != HttpStatusCode.UnprocessableContent)
+            {
+                var rate = JsonConvert.DeserializeObject<RatesServiceDto>(response.Content);
+                reciverRate = rate.Rates[receiver.Currency];
+            }
+            
+
             // Update balances
             sender.Balance -= transactionServiceDto.Amount;
-            receiver.Balance += transactionServiceDto.Amount;
+            receiver.Balance += transactionServiceDto.Amount * reciverRate;
 
             // Log transaction
             var transaction = new Transaction
@@ -100,15 +119,15 @@ namespace BankSystem.Server.Services.Services
             }
             else
             {
-                
+
                 foreach (var transaction in transactions)
                 {
                     var transactionHistory = new TransactionHistoryServiceDto();
-                    if (transaction.ReciverAccountId.ToString() == userId && transaction.SenderAccountId.ToString() == userId)                        
+                    if (transaction.ReciverAccountId.ToString() == userId && transaction.SenderAccountId.ToString() == userId)
                     {
                         transactionHistory.Direction = "INTERNAL";
                     }
-                    else if(transaction.ReciverAccountId.ToString() == userId)
+                    else if (transaction.ReciverAccountId.ToString() == userId)
                     {
                         transactionHistory.Direction = "INCOMING";
                     }
@@ -120,20 +139,21 @@ namespace BankSystem.Server.Services.Services
                     var reciverName = await _bankRepository.Users
                         .Where(u => u.Id == transaction.ReciverAccountId)
                         .Select(u => u.FullName)
-                        .FirstOrDefaultAsync(); 
+                        .FirstOrDefaultAsync();
                     transactionHistory.ReciverName = reciverName ?? "Unknown Receiver";
                     transactionHistory.toAccountNumber = transaction.ReciverAccount.AccountNumber;
                     transactionHistory.fromAccountNumber = transaction.SenderAccount.AccountNumber;
                     transactionHistory.Amount = transaction.Amount;
                     transactionHistory.Date = transaction.Date;
                     transactionHistory.description = transaction.Details ?? "No description provided.";
+                    transactionHistory.Currency = transaction.SenderAccount.Currency;
 
 
 
                     transactionHistories.Add(transactionHistory);
                 }
             }
-                return HttpResult.Factory.Create(HttpStatusCode.OK, transactionHistories);
+            return HttpResult.Factory.Create(HttpStatusCode.OK, transactionHistories);
         }
         public async Task<HttpResult> Deposit(DepositServiceDto depositServiceDto)
         {
@@ -165,7 +185,7 @@ namespace BankSystem.Server.Services.Services
                     newBalance = reciverAccount.Balance
                 });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return HttpResult.Factory.Create(HttpStatusCode.InternalServerError, null, "Internal server error!");
             }

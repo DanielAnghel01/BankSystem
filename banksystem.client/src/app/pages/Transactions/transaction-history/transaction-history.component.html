@@ -12,7 +12,7 @@
             <p><strong>Receiver Name:</strong> {{ t.reciverName }}</p>
             <p><strong>From:</strong> {{ t.fromAccountNumber }}</p>
             <p><strong>To:</strong> {{ t.toAccountNumber }}</p>
-            <p><strong>Amount:</strong> {{ t.amount | currency }}</p>
+            <p><strong>Amount:</strong> {{t.currency}}  - {{ t.amount}}</p>
             <p><strong>Date:</strong> {{ t.date | date:'medium' }}</p>
             <p><strong>Description:</strong> {{ t.description }}</p>
           </mat-card-content>
