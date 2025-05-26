@@ -1,0 +1,22 @@
+<section class="max-w-lg mx-auto p-6 bg-white shadow-md rounded-md space-y-4">
+  <h2 class="text-2xl font-semibold text-center">💰 Withdraw Funds</h2>
+
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Select Account</mat-label>
+    <mat-select [(ngModel)]="selectedAccountNumber" name="account" required>
+      <mat-option *ngFor="let account of userAccounts" [value]="account.accountNumber">
+        {{ account.accountType }} - {{ account.currency }} {{ account.balance | number:'1.2-2' }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Amount</mat-label>
+    <input matInput type="number" [(ngModel)]="withdrawAmount" name="amount" required />
+  </mat-form-field>
+
+  <div class="flex justify-end gap-2">
+    <button mat-raised-button color="primary" (click)="submitDeposit()">Withdraw</button>
+    <button mat-stroked-button (click)="resetForm()">Reset</button>
+  </div>
+</section>

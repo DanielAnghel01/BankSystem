@@ -8,12 +8,10 @@ namespace BankSystem.Server.Services.Dtos
 {
     public class TransactionServiceDto
     {
-        public int UserId { get; set; }
-        public string SenderAccountNumber { get; set; } = string.Empty;
-        public string ReceiverAccountNumber { get; set; } = string.Empty;
+        public string SenderAccountNumber { get; set; }
+        public string ReciverAccountNumber { get; set; }
         public decimal Amount { get; set; }
-        public string Currency { get; set; } = "USD";
-        public string Details { get; set; } = string.Empty;
+        public string Details { get; set; }
         public DateTime Date { get; set; } = DateTime.UtcNow;
     }
 }

@@ -1,17 +1,33 @@
-<div class="transaction-form">
-  <h2>Make a Transaction</h2>
+<div class="transaction-form p-6 max-w-lg mx-auto bg-white rounded-lg shadow-md space-y-4">
+  <h2 class="text-xl font-semibold mb-4 text-center">Make a Transaction</h2>
 
-  <label for="sender">Sender Account Number</label>
-  <input type="text" id="sender" [(ngModel)]="senderAccountNumber" name="senderAccountNumber" required />
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>My Accounts</mat-label>
+    <mat-select [(ngModel)]="senderAccountNumber" name="senderAccountNumber" required>
+      <mat-option *ngFor="let account of userAccounts" [value]="account.accountNumber">
+        {{ account.accountType }} - {{account.currency}} {{account.balance | number:'1.2-2'}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 
-  <label for="receiver">Receiver Account Number</label>
-  <input type="text" id="receiver" [(ngModel)]="reciverAccountNumber" name="reciverAccountNumber" required />
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Receiver Account Number</mat-label>
+    <input matInput type="text" [(ngModel)]="reciverAccountNumber" name="reciverAccountNumber" required />
+  </mat-form-field>
 
-  <label for="amount">Amount</label>
-  <input type="number" id="amount" [(ngModel)]="amount" name="amount" required />
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Amount</mat-label>
+    <input matInput type="number" [(ngModel)]="amount" name="amount" required />
+  </mat-form-field>
 
-  <label for="details">Details</label>
-  <input type="text" id="details" [(ngModel)]="details" name="details" />
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Details</mat-label>
+    <input matInput type="text" [(ngModel)]="details" name="details" />
+  </mat-form-field>
 
-  <button (click)="submit()">Submit</button>
+  <div class="flex justify-end gap-2">
+    <button mat-raised-button color="primary" (click)="submit()">Submit</button>
+    <button mat-stroked-button type="reset" (click)="resetForm()">Reset</button>
+    <button mat-stroked-button (click)="goToProfile()">Profile</button>
+  </div>
 </div>

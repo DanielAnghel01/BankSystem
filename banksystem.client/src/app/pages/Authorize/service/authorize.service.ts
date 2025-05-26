@@ -12,15 +12,15 @@ import { jwtDecode } from 'jwt-decode';
   providedIn: 'root'
 })
 export class AuthorizeService {
-  private apiUrl = 'https://bank-system-web.azurewebsites.net/api/auth/login';
-  private apiUrlRegister = 'https://bank-system-web.azurewebsites.net/api/auth/register';
+  private apiUrlLogin = '';
+  private apiUrlRegister = '';
 
   constructor(
     private httpClient: HttpClient,
     private localStorageService: LocalStorageService
   ){
-    this.apiUrl = environment.apiUrl;
-    this.apiUrlRegister = environment.apiUrlRegister;
+    this.apiUrlLogin = environment.apiUrlLocal + 'api/auth/login';
+    this.apiUrlRegister = environment.apiUrlLocal + 'api/auth/register';
   }
 
   register(registerModel: RegisterModel): Promise<Response<TokenModel>> {
@@ -48,7 +48,7 @@ export class AuthorizeService {
     });
 
     return new Promise((resolve, reject) => {
-      this.httpClient.post<Response<TokenModel>>(this.apiUrl, loginModel, { headers })
+      this.httpClient.post<Response<TokenModel>>(this.apiUrlLogin, loginModel, { headers })
         .toPromise()
         .then((result) => {
           console.log("First one: " + result?.content);

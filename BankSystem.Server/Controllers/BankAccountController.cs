@@ -7,6 +7,7 @@ using BankSystem.Server.Services.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
+using System.Security.Claims;
 
 namespace BankSystem.Server.Controllers
 {
@@ -30,6 +31,14 @@ namespace BankSystem.Server.Controllers
             if (result.StatusCode >= 400)
                 return StatusCode(result.StatusCode, new { error = result.ErrorMessage });
 
+            return StatusCode(result.StatusCode, result.Content);
+        }
+
+        [HttpGet("by-user")]
+        public async Task<IActionResult> GetAccountByUser()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var result = await _bankAccountService.GetAccountByUser(userId);
             return StatusCode(result.StatusCode, result.Content);
         }
     }

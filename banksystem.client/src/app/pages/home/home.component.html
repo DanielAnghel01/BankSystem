@@ -21,7 +21,7 @@
     <h1>Welcome to Rock Solid Bank</h1>
     <p>Your trusted partner in modern, secure, and efficient banking.</p>
     <div class="hero-buttons">
-      <button mat-raised-button class="logInReg-btn" routerLink="/register">Open an Account</button>
+      <button mat-raised-button *ngIf="!isLoggedIn()" class="logInReg-btn" routerLink="/register">Open an Account</button>
       <button mat-stroked-button *ngIf="!isLoggedIn()" class="logInReg-btn" routerLink="/login">Log In</button>
     </div>
   </section>

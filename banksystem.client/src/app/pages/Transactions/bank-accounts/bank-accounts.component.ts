@@ -11,6 +11,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card'; 
 import { BankAccountModel } from '../models/bank-account.model';
 import { AuthorizeService } from '../../Authorize/service/authorize.service';
+import { MatSelectModule } from '@angular/material/select';
+import { Router } from '@angular/router';
 
 @Component({
   standalone: true,
@@ -25,25 +27,22 @@ import { AuthorizeService } from '../../Authorize/service/authorize.service';
     MatInputModule,
     MatButtonModule,
     MatCardModule,
+    MatSelectModule
   ]
 })
-export class BankAccountComponent implements OnInit {
+export class BankAccountComponent{
   accounts: BankAccountModel[] = [];
 
   constructor(
     private bankAccountService: BankAccountService,
-    private authorizeService: AuthorizeService
+    private authorizeService: AuthorizeService,
+    private router: Router 
   ) { }
 
-  ngOnInit(): void {
-    this.bankAccountService.getAccounts().subscribe({
-      next: data => this.accounts = data,
-      error: err => console.error('Error fetching accounts:', err)
-    });
-  }
+
 
   newAccount = {
-    userId: 0, // Replace with actual logic to get the logged-in user's ID
+    userId: this.authorizeService.getIdFromToken(),
     accountType: '',
     currency: '',
     balance: 0,
@@ -53,7 +52,6 @@ export class BankAccountComponent implements OnInit {
 
   createAccount() {
     this.newAccount.accountNumber = this.generateRandomAccountNumber();
-    this.newAccount.userId = this.authorizeService.getIdFromToken();
     console.log(this.newAccount.userId);
     if (this.newAccount.userId !== null) {
       this.bankAccountService.createAccount(this.newAccount).subscribe({
@@ -64,12 +62,17 @@ export class BankAccountComponent implements OnInit {
         error: (err) => console.error('Error creating account', err)
       });
     }
-    }
-
-
-    
+  }
 
   generateRandomAccountNumber(): string {
     return Math.floor(100000000 + Math.random() * 900000000).toString();
+  }
+
+  goToProfile(): void {
+    this.router.navigate(['/user'])
+  }
+
+  goToTransferFunds(): void {
+    this.router.navigate(['/transfer'])
   }
 }

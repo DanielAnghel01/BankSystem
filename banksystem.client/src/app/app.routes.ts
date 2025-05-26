@@ -38,10 +38,10 @@ export const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'transaction',
+    path: 'transfer',
     //component: TransactionComponent,
     loadComponent: () => import('./pages/Transactions/transaction/transaction.component').then(m => m.TransactionComponent),
-    data: { title: 'Transactions' },
+    data: { title: 'transfer' },
     canActivate: [AuthGuard]
   },
   {
@@ -55,6 +55,34 @@ export const routes: Routes = [
     //component: ExchangeRatesComponent,
     loadComponent: () => import('./pages/exchange-rates/exchange-rates.component').then(m => m.ExchangeRatesComponent),
     data: { title: 'Exchange Rates' },
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'transaction',
+    //component: TransactionComponent,
+    loadComponent: () => import('./pages/Transactions/transaction-history/transaction-history.component').then(m => m.TransactionHistoryComponent),
+    data: { title: 'transaction' },
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'deposit',
+    //component: TransactionComponent,
+    loadComponent: () => import('./pages/Transactions/deposit/deposit.component').then(m => m.DepositComponent),
+    data: { title: 'deposit' },
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'withdraw',
+    //component: TransactionComponent,
+    loadComponent: () => import('./pages/Transactions/withdraw/withdraw.component').then(m => m.WithdrawComponent),
+    data: { title: 'withdraw' },
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'dashboard',
+    //component: TransactionComponent,
+    loadComponent: () => import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent),
+    data: { title: 'dashboard' },
     canActivate: [AuthGuard]
   },
 

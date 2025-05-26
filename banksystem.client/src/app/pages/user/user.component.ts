@@ -49,4 +49,13 @@ export class UserComponent implements OnInit {
     this.authorizeService.signOut();
     this.router.navigate(['/home']);
   }
+  createBankAccount(): void {
+    this.router.navigate(['/bank-accounts'])
+  }
+  goToHome(): void {
+    this.router.navigate(['/home'])
+  }
+  goToTransfer(): void {
+    this.router.navigate(['/transfer'])
+  }
 }

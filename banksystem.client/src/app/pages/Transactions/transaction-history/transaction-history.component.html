@@ -1,0 +1,51 @@
+<section class="max-w-4xl mx-auto p-6">
+  <div class="flex justify-end gap-4 mb-6">
+
+
+    <h2 class="text-2xl font-semibold mb-4">Transaction History</h2>
+
+    <div *ngIf="transactions.length > 0; else noTransactions">
+      <div *ngFor="let t of transactions" class="mb-4">
+        <mat-card>
+          <mat-card-content>
+            <p><strong>Direction:</strong> {{ t.direction }}</p>
+            <p><strong>Receiver Name:</strong> {{ t.reciverName }}</p>
+            <p><strong>From:</strong> {{ t.fromAccountNumber }}</p>
+            <p><strong>To:</strong> {{ t.toAccountNumber }}</p>
+            <p><strong>Amount:</strong> {{ t.amount | currency }}</p>
+            <p><strong>Date:</strong> {{ t.date | date:'medium' }}</p>
+            <p><strong>Description:</strong> {{ t.description }}</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <ng-template #noTransactions>
+      <p class="text-gray-600">No transactions found.</p>
+    </ng-template>
+
+    <button mat-raised-button
+            color="primary"
+            class="home-btn"
+            (click)="goToHome()">
+      <mat-icon class="mr-2">house</mat-icon>
+      Home
+    </button>
+
+    <button mat-raised-button
+            color="primary"
+            class="user-account-btn"
+            (click)="goToProfile()">
+      <mat-icon class="mr-2">person</mat-icon>
+      Profile
+    </button>
+
+    <button mat-raised-button
+            color="primary"
+            class="transfer-btn"
+            (click)="goToDashboard()">
+      <mat-icon class="mr-2">dashboard</mat-icon>
+      Dashboard
+    </button>
+  </div>
+</section>

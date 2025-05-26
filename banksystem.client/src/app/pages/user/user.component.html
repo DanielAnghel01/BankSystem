@@ -1,14 +1,37 @@
 <main class="app-main">
   <section class="user-profile">
-    <div class="flex justify-between items-center mb-4">
+    <div class="justify-center">
       <h1>👤 Welcome, {{ user?.fullName }}</h1>
 
+    </div>
+    <div class="flex gap-2 items-center justify-start mb-4">
       <button mat-raised-button
               color="warn"
               class="logout-btn"
               (click)="logout()">
         <mat-icon class="mr-2">logout</mat-icon>
         Logout
+      </button>
+      <button mat-raised-button
+              color="primary"
+              class="user-account-btn"
+              (click)="createBankAccount()">
+        <mat-icon class="mr-2">person</mat-icon>
+        Bank Account
+      </button>
+      <button mat-raised-button
+              color="primary"
+              class="home-btn"
+              (click)="goToHome()">
+        <mat-icon class="mr-2">house</mat-icon>
+        Home
+      </button>
+      <button mat-raised-button
+              color="primary"
+              class="transfer-btn"
+              (click)="goToTransfer()">
+        <mat-icon class="mr-2">payment</mat-icon>
+        Transfer Funds
       </button>
     </div>
 
@@ -28,7 +51,7 @@
         <mat-card class="account-card" *ngFor="let account of bankAccount">
           <mat-card-title>Account #{{ account?.accountNumber }}</mat-card-title>
           <mat-card-content>
-            <p><strong>💰 Balance:</strong> {{ account?.balance }}</p>
+            <p><strong>💰 Balance:</strong> {{account?.currency}}  {{ account?.balance | number:'1.2-2' }}</p>
             <p><strong>🏷️ Type:</strong> {{ account?.accountType }}</p>
           </mat-card-content>
         </mat-card>

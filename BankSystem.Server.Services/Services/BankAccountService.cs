@@ -10,12 +10,12 @@ namespace BankSystem.Server.Services.Services
 {
     public class BankAccountService
     {
-        private readonly BankDbContext _bankRepository;
+        private readonly BankDbContext _bankDbContext;
         private readonly RequestService _requestService;
 
-        public BankAccountService(BankDbContext bankRepository, RequestService requestService)
+        public BankAccountService(BankDbContext bankDbContext, RequestService requestService)
         {
-            _bankRepository = bankRepository;
+            _bankDbContext = bankDbContext;
             _requestService = requestService;
         }
 
@@ -59,6 +59,26 @@ namespace BankSystem.Server.Services.Services
                     createdAt = account.CreatedAt
                 });
         }
+
+        public async Task<HttpResult> GetAccountByUser(string userId)
+        {
+            try
+            {
+                var bankAccounts = await _bankDbContext.BankAccounts.Where(e => e.UserId.ToString() == userId).ToListAsync();
+
+                if (bankAccounts.Count == 0)
+                {
+                    return HttpResult.Factory.Create(HttpStatusCode.BadRequest, null, "No bank accounts!");
+                }
+
+                return HttpResult.Factory.Create(HttpStatusCode.OK, bankAccounts);
+            }
+            catch(Exception ex)
+            {
+                return HttpResult.Factory.Create(HttpStatusCode.InternalServerError, null, "Internal server error!");
+            }
+        }
+
         // Helper method to generate a random account number
         private string GenerateAccountNumber()
         {

@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://bank-system-web.azurewebsites.net/api/auth/login',
+  apiUrlProd: 'https://bank-system-web.azurewebsites.net/',
   //apiUrl: 'https://localhost:7022/api/auth/login',
-  apiUrlRegister: 'https://localhost:7022/api/auth/register'
+  apiUrlLocal: 'https://localhost:7022/'
 }
