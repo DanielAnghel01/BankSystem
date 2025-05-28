@@ -15,7 +15,7 @@ export class BankAccountService {
     private http: HttpClient,
     private localStorageService: LocalStorageService
   ) {
-    this.apiUrl = environment.apiUrlLocal + 'api/bank-account';
+    this.apiUrl = environment.apiUrlProd + 'api/bank-account';
   }
 
   getAccounts(): Observable<BankAccountModel[]> {

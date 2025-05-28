@@ -17,7 +17,7 @@ export class UserService {
     private httpClient: HttpClient,
     private localStorageService: LocalStorageService
   ) {
-    this.apiUrl = environment.apiUrlLocal + 'api/user/profile';
+    this.apiUrl = environment.apiUrlProd + 'api/user/profile';
   }
 
   getUserProfile(): Promise<UserProfileModel> {

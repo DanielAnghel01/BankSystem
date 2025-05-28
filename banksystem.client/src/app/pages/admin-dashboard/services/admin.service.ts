@@ -18,8 +18,8 @@ export class AdminService {
     private httpClient: HttpClient,
     private localStorageService: LocalStorageService
   ) {
-    this.apiUrl = environment.apiUrlLocal + 'api/user';
-    this.apiUrlRegister = environment.apiUrlLocal + 'api/auth';
+    this.apiUrl = environment.apiUrlProd + 'api/user';
+    this.apiUrlRegister = environment.apiUrlProd + 'api/auth';
   }
 
   loadUsers(): Promise<User[]> {

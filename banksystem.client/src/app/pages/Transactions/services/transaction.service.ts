@@ -16,7 +16,7 @@ export class TransactionService {
     private http: HttpClient,
     private localStorage: LocalStorageService
   ) {
-    this.apiUrl = environment.apiUrlLocal + 'api/transaction';
+    this.apiUrl = environment.apiUrlProd + 'api/transaction';
   }
 
   makeTransfer(transaction: Partial<TransactionModel>): Observable<any> {

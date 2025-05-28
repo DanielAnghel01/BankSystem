@@ -21,8 +21,8 @@ export class AuthorizeService {
     private localStorageService: LocalStorageService,
     private dialog: MatDialog
   ){
-    this.apiUrlLogin = environment.apiUrlLocal ;
-    this.apiUrlRegister = environment.apiUrlLocal + 'api/auth/register';
+    this.apiUrlLogin = environment.apiUrlProd ;
+    this.apiUrlRegister = environment.apiUrlProd + 'api/auth/register';
   }
 
   register(registerModel: RegisterModel): Promise<Response<TokenModel>> {
