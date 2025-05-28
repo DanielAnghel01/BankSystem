@@ -6,16 +6,19 @@ import { BankAccount } from '../models/bank-account.models';
 import { LocalStorageService } from '../../Authorize/service/storage.service';
 import { UserProfileModel } from '../models/user-profile.models';
 import { Response } from '../../../core/models/response.model';
+import { environment } from '../../../../enviroments/enviroment';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
   user!: User;
   bankAccount!: BankAccount[];
-  private apiUrl = 'https://bank-system-web.azurewebsites.net/api/user/profile';
+  private apiUrl = '';
   constructor(
     private httpClient: HttpClient,
     private localStorageService: LocalStorageService
-  ) { }
+  ) {
+    this.apiUrl = environment.apiUrlProd + 'api/user/profile';
+  }
 
   getUserProfile(): Promise<UserProfileModel> {
     const headers = new HttpHeaders({

@@ -38,16 +38,78 @@ export const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'transaction',
+    path: 'transfer',
     //component: TransactionComponent,
     loadComponent: () => import('./pages/Transactions/transaction/transaction.component').then(m => m.TransactionComponent),
-    data: { title: 'Transactions' },
+    data: { title: 'transfer' },
     canActivate: [AuthGuard]
   },
   {
     path: 'user',
     loadComponent: () => import('./pages/user/user.component').then(m => m.UserComponent),
     data: { title: 'User' },
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'exchange-rates',
+    //component: ExchangeRatesComponent,
+    loadComponent: () => import('./pages/exchange-rates/exchange-rates.component').then(m => m.ExchangeRatesComponent),
+    data: { title: 'Exchange Rates' },
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'transaction',
+    //component: TransactionComponent,
+    loadComponent: () => import('./pages/Transactions/transaction-history/transaction-history.component').then(m => m.TransactionHistoryComponent),
+    data: { title: 'transaction' },
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'deposit',
+    //component: TransactionComponent,
+    loadComponent: () => import('./pages/Transactions/deposit/deposit.component').then(m => m.DepositComponent),
+    data: { title: 'deposit' },
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'withdraw',
+    //component: TransactionComponent,
+    loadComponent: () => import('./pages/Transactions/withdraw/withdraw.component').then(m => m.WithdrawComponent),
+    data: { title: 'withdraw' },
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'dashboard',
+    //component: TransactionComponent,
+    loadComponent: () => import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent),
+    data: { title: 'dashboard' },
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'terms-and-conditions',
+    //component: TransactionComponent,
+    loadComponent: () => import('./pages/terms-and-conditions/terms-and-conditions.component').then(m => m.TermsAndConditionsComponent),
+    data: { title: 'Terms&Conditions' },
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'privacy',
+    //component: TransactionComponent,
+    loadComponent: () => import('./pages/privacy/privacy.component').then(m => m.PrivacyComponent),
+    data: { title: 'Privacy Policy' },
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'acces-denied',
+    //component: TransactionComponent,
+    loadComponent: () => import('./pages/Authorize/acces-denied/acces-denied.component').then(m => m.AccesDeniedComponent),
+    data: { title: 'acces-denied' }
+  },
+  {
+    path: 'admin',
+    //component: TransactionComponent,
+    loadComponent: () => import('./pages/admin-dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent),
+    data: { title: 'admin', roles: ['admin'] },
     canActivate: [AuthGuard]
   },
 

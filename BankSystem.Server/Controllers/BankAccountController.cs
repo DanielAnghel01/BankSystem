@@ -4,9 +4,11 @@ using BankSystem.Server.Dtos;
 using BankSystem.Server.Infrastructure.DataAccess;
 using BankSystem.Server.Services.Dtos;
 using BankSystem.Server.Services.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
+using System.Security.Claims;
 
 namespace BankSystem.Server.Controllers
 {
@@ -21,7 +23,7 @@ namespace BankSystem.Server.Controllers
             _mapper = mapper;
             _bankAccountService = bankAccountService;
         }
-
+        
         [HttpPost("create")]
         public async Task<IActionResult> CreateAccount([FromBody] CreateBankAccountDto accountDto)
         {
@@ -30,6 +32,14 @@ namespace BankSystem.Server.Controllers
             if (result.StatusCode >= 400)
                 return StatusCode(result.StatusCode, new { error = result.ErrorMessage });
 
+            return StatusCode(result.StatusCode, result.Content);
+        }
+
+        [HttpGet("by-user")]
+        public async Task<IActionResult> GetAccountByUser()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var result = await _bankAccountService.GetAccountByUser(userId);
             return StatusCode(result.StatusCode, result.Content);
         }
     }

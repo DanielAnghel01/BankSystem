@@ -10,12 +10,12 @@ namespace BankSystem.Server.Services.Services
 {
     public class BankAccountService
     {
-        private readonly BankDbContext _bankRepository;
+        private readonly BankDbContext _bankDbContext;
         private readonly RequestService _requestService;
 
-        public BankAccountService(BankDbContext bankRepository, RequestService requestService)
+        public BankAccountService(BankDbContext bankDbContext, RequestService requestService)
         {
-            _bankRepository = bankRepository;
+            _bankDbContext = bankDbContext;
             _requestService = requestService;
         }
 
@@ -25,6 +25,16 @@ namespace BankSystem.Server.Services.Services
                 string.IsNullOrWhiteSpace(createAccountServiceDto.Currency) ||
                 createAccountServiceDto.Balance <= 0)
             {
+                var auditError = new AuditError
+                {
+                    UserId = createAccountServiceDto.UserId,
+                    Action = "CreateBankAccount",
+                    Description = "Invalid account creation request: all fields are required and balance must be greater than zero.",
+                    Timestamp = DateTime.UtcNow
+                };
+
+                await _requestService.SaveAuditError(auditError);
+
                 return HttpResult.Factory.Create(HttpStatusCode.BadRequest, null,
                     "All fields are required and balance must be greater than zero.");
             }
@@ -45,9 +55,29 @@ namespace BankSystem.Server.Services.Services
             }
             catch (Exception ex)
             {
+                var auditError = new AuditError
+                {
+                    UserId = createAccountServiceDto.UserId,
+                    Action = "CreateBankAccount",
+                    Description = $"Error saving account: {ex.Message}",
+                    Timestamp = DateTime.UtcNow
+                };
+
+                await _requestService.SaveAuditError(auditError);
+
                 return HttpResult.Factory.Create(HttpStatusCode.InternalServerError, null,
                     $"Error saving account: {ex.Message}");
             }
+
+            var auditLog = new AuditLog
+            {
+                UserId = createAccountServiceDto.UserId,
+                Action = "CreateBankAccount",
+                Timestamp = DateTime.UtcNow,
+                Description = $"Created account {account.AccountNumber} of type {account.AccountType} with balance {account.Balance}."
+            };
+
+            await _requestService.SaveAuditLog(auditLog);
 
             return HttpResult.Factory.Create(HttpStatusCode.Created,
                 new {
@@ -59,6 +89,51 @@ namespace BankSystem.Server.Services.Services
                     createdAt = account.CreatedAt
                 });
         }
+
+        public async Task<HttpResult> GetAccountByUser(string userId)
+        {
+            try
+            {
+                var bankAccounts = await _bankDbContext.BankAccounts.Where(e => e.UserId.ToString() == userId).ToListAsync();
+
+                if (bankAccounts.Count == 0)
+                {
+                    var auditError = new AuditError
+                    {
+                        UserId = Convert.ToInt64(userId),
+                        Action = "GetAccountByUser",
+                        Description = "No bank accounts found for the user.",
+                        Timestamp = DateTime.UtcNow
+                    };
+                    await _requestService.SaveAuditError(auditError);
+                    return HttpResult.Factory.Create(HttpStatusCode.BadRequest, null, "No bank accounts!");
+                }
+                var auditLog = new AuditLog
+                {
+                    UserId = Convert.ToInt64(userId),
+                    Action = "GetAccountByUser",
+                    Timestamp = DateTime.UtcNow,
+                    Description = $"Retrieved accounts for user {userId}"
+                };
+                await _requestService.SaveAuditLog(auditLog);
+
+                return HttpResult.Factory.Create(HttpStatusCode.OK, bankAccounts);
+            }
+            catch(Exception ex)
+            {
+                var auditError = new AuditError
+                {
+                    UserId = Convert.ToInt64(userId),
+                    Action = "GetAccountByUser",
+                    Description = $"Error retrieving accounts: {ex.Message}",
+                    Timestamp = DateTime.UtcNow
+                };
+                await _requestService.SaveAuditError(auditError);
+
+                return HttpResult.Factory.Create(HttpStatusCode.InternalServerError, null, "Internal server error!");
+            }
+        }
+
         // Helper method to generate a random account number
         private string GenerateAccountNumber()
         {

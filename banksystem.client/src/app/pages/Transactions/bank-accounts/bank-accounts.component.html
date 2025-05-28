@@ -1,6 +1,7 @@
 <section class="accounts-section">
-  <h2>Your Bank Accounts</h2>
-  <div class="account-list">
+  <h2 class="text-xl font-bold mb-4">💼 Your Bank Accounts</h2>
+
+  <div class="account-list grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
     <mat-card *ngFor="let account of accounts" class="account-card">
       <mat-card-title>{{ account.accountType }} - {{ account.currency }}</mat-card-title>
       <mat-card-content>
@@ -12,22 +13,44 @@
   </div>
 </section>
 
-<h2>Create Bank Account</h2>
-<form (ngSubmit)="createAccount()" #accountForm="ngForm">
+<hr class="my-6">
+
+<h2 class="text-xl font-bold mb-4">➕ Create Bank Account</h2>
+
+<form (ngSubmit)="createAccount()" #accountForm="ngForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+  <!-- Account Type Dropdown -->
   <mat-form-field appearance="fill">
     <mat-label>Account Type</mat-label>
-    <input matInput name="accountType" [(ngModel)]="newAccount.accountType" required />
+    <mat-select name="accountType" [(ngModel)]="newAccount.accountType" required>
+      <mat-option value="Debit">Debit</mat-option>
+      <mat-option value="Credit">Credit</mat-option>
+      <mat-option value="Savings">Savings</mat-option>
+      <mat-option value="Deposit">Deposit</mat-option>
+    </mat-select>
   </mat-form-field>
 
+  <!-- Currency -->
   <mat-form-field appearance="fill">
     <mat-label>Currency</mat-label>
-    <input matInput name="currency" [(ngModel)]="newAccount.currency" required />
+    <mat-select name="currency" [(ngModel)]="newAccount.currency" required>
+      <mat-option value="RON">RON</mat-option>
+      <mat-option value="GBP">GBP</mat-option>
+      <mat-option value="USD">USD</mat-option>
+      <mat-option value="EUR">EUR</mat-option>
+      <mat-option value="JPY">JPY</mat-option>
+    </mat-select>
   </mat-form-field>
 
+  <!-- Initial Balance -->
   <mat-form-field appearance="fill">
     <mat-label>Initial Balance</mat-label>
     <input matInput type="number" name="balance" [(ngModel)]="newAccount.balance" required />
   </mat-form-field>
 
-  <button mat-raised-button color="primary" type="submit">Create Account</button>
+  
+  <div class="md:col-span-2 flex justify-end mt-2">
+    <button mat-raised-button color="primary" type="submit" class="mr-6">Create Account</button>
+    <button mat-raised-button color="primary" (click)="goToProfile()" class="mr-6">Profile</button>
+    <button mat-raised-button color="primary" (click)="goToTransferFunds()" class="mr-6">Transfer Funds</button>
+  </div>
 </form>

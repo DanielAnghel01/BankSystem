@@ -16,5 +16,7 @@ namespace BankSystem.Server.Domain.Entities
         public DateTime DateOfBirth { get; set; }
         public DateTime CreatedAt { get; set; }
         public bool IsActive { get; set; }
+        public bool TwoFAEnabled { get; set; } = false;
+        public string? TwoFACode { get; set; }
     }
 }

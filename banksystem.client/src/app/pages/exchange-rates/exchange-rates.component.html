@@ -1,0 +1,18 @@
+<h2>Exchange Rates (Base: {{ baseCurrency }})</h2>
+
+<table *ngIf="rates" class="rates-table">
+  <thead>
+    <tr>
+      <th>Currency</th>
+      <th>Rate</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let key of rates | keyvalue">
+      <td>{{ key.key }}</td>
+      <td>{{ toNumber(key.value) | number: '1.2-2' }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<p *ngIf="!rates" class="loading-text">Loading exchange rates...</p>

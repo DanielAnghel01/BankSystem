@@ -6,17 +6,17 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace BankSystem.Server.Infrastructure.DataAccess.Migrations
 {
-    /// <inheritdoc />
+    // <inheritdoc />
     public partial class InitialMigration : Migration
     {
-        /// <inheritdoc />
+        // <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
                 name: "BANK");
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "USER",
                 schema: "BANK",
                 columns: table => new
                 {
@@ -29,11 +29,36 @@ namespace BankSystem.Server.Infrastructure.DataAccess.Migrations
                     Role = table.Column<string>(type: "text", nullable: false),
                     DateOfBirth = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false)
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    TwoFAEnabled = table.Column<bool>(type: "boolean", nullable: false),
+                    TwoFACode = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_USER", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AUDIT_ERROR",
+                schema: "BANK",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<long>(type: "bigint", nullable: true),
+                    Action = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    Timestamp = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AUDIT_ERROR", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AUDIT_ERROR_USER_UserId",
+                        column: x => x.UserId,
+                        principalSchema: "BANK",
+                        principalTable: "USER",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -52,10 +77,10 @@ namespace BankSystem.Server.Infrastructure.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_AUDIT_LOGS", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AUDIT_LOGS_Users_UserId",
+                        name: "FK_AUDIT_LOGS_USER_UserId",
                         column: x => x.UserId,
                         principalSchema: "BANK",
-                        principalTable: "Users",
+                        principalTable: "USER",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -78,10 +103,10 @@ namespace BankSystem.Server.Infrastructure.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_BANK_ACCOUNT", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BANK_ACCOUNT_Users_UserId",
+                        name: "FK_BANK_ACCOUNT_USER_UserId",
                         column: x => x.UserId,
                         principalSchema: "BANK",
-                        principalTable: "Users",
+                        principalTable: "USER",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -103,10 +128,10 @@ namespace BankSystem.Server.Infrastructure.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_LOGIN_TOKEN", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_LOGIN_TOKEN_Users_UserId",
+                        name: "FK_LOGIN_TOKEN_USER_UserId",
                         column: x => x.UserId,
                         principalSchema: "BANK",
-                        principalTable: "Users",
+                        principalTable: "USER",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -145,6 +170,12 @@ namespace BankSystem.Server.Infrastructure.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AUDIT_ERROR_UserId",
+                schema: "BANK",
+                table: "AUDIT_ERROR",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AUDIT_LOGS_UserId",
                 schema: "BANK",
                 table: "AUDIT_LOGS",
@@ -175,9 +206,13 @@ namespace BankSystem.Server.Infrastructure.DataAccess.Migrations
                 column: "SenderAccountId");
         }
 
-        /// <inheritdoc />
+        // <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AUDIT_ERROR",
+                schema: "BANK");
+
             migrationBuilder.DropTable(
                 name: "AUDIT_LOGS",
                 schema: "BANK");
@@ -195,7 +230,7 @@ namespace BankSystem.Server.Infrastructure.DataAccess.Migrations
                 schema: "BANK");
 
             migrationBuilder.DropTable(
-                name: "Users",
+                name: "USER",
                 schema: "BANK");
         }
     }

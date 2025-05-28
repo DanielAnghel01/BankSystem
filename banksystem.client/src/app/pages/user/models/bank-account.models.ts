@@ -3,4 +3,5 @@ export class BankAccount {
   accountNumber!: string;
   balance!: number;
   accountType!: string;
+  currency!: string;
 }

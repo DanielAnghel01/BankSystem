@@ -10,5 +10,6 @@ namespace BankSystem.Server.Services.Dtos
     {
         public string Token { get; set; }
         public string Username { get; set; }
+        public bool TwoFAEnabled { get; set; }
     }
 }

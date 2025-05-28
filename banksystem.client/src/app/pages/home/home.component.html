@@ -1,3 +1,16 @@
+<div *ngIf="showTermsPopup" class="terms-popup-overlay">
+  <div class="terms-popup-box">
+    <h2>📜 Terms & Conditions</h2>
+    <p>You must read and accept our Terms and Conditions to continue using Rock Solid Bank.</p>
+    <div class="popup-buttons">
+      <button mat-flat-button color="primary" (click)="acceptTerms()">✅ Accept</button>
+      <button mat-stroked-button color="warn" (click)="rejectTerms()">❌ Reject</button>
+      <button mat-button color="accent" routerLink="/terms-and-conditions">📄 View Terms</button>
+    </div>
+  </div>
+</div>
+
+
 <!-- Header (Top Nav Bar) -->
 <header class="app-toolbar">
   <div class="app-title">Rock Solid</div>
@@ -8,6 +21,7 @@
     <a routerLink="/transfer">💸 Transfer Funds</a>
     <a routerLink="/exchange-rates">📊 Exchange Rates</a>
     <a routerLink="/user">👤 Profile</a>
+    <a *ngIf="isAdminIn()" routerLink="/admin">📊 Admin Dashboard</a>
   </nav>
 
   <div *ngIf="isLoggedIn()" class="text-white font-bold">
@@ -21,7 +35,7 @@
     <h1>Welcome to Rock Solid Bank</h1>
     <p>Your trusted partner in modern, secure, and efficient banking.</p>
     <div class="hero-buttons">
-      <button mat-raised-button class="logInReg-btn" routerLink="/register">Open an Account</button>
+      <button mat-raised-button *ngIf="!isLoggedIn()" class="logInReg-btn" routerLink="/register">Open an Account</button>
       <button mat-stroked-button *ngIf="!isLoggedIn()" class="logInReg-btn" routerLink="/login">Log In</button>
     </div>
   </section>
@@ -66,5 +80,5 @@
 <footer class="app-footer">
   &copy; 2025 - Rock Solid -
   <a routerLink="/privacy">Privacy</a> -
-  <a routerLink="/terms">Terms of Use</a>
+  <a routerLink="/terms-and-conditions">Terms&Conditions</a>
 </footer>
