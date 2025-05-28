@@ -23,6 +23,35 @@ namespace BankSystem.Server.Infrastructure.DataAccess.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("BankSystem.Server.Domain.Entities.AuditError", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AUDIT_ERROR", "BANK");
+                });
+
             modelBuilder.Entity("BankSystem.Server.Domain.Entities.AuditLog", b =>
                 {
                     b.Property<long>("Id")
@@ -189,6 +218,12 @@ namespace BankSystem.Server.Infrastructure.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("TwoFACode")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("TwoFAEnabled")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("text");
@@ -196,6 +231,15 @@ namespace BankSystem.Server.Infrastructure.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("USER", "BANK");
+                });
+
+            modelBuilder.Entity("BankSystem.Server.Domain.Entities.AuditError", b =>
+                {
+                    b.HasOne("BankSystem.Server.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BankSystem.Server.Domain.Entities.AuditLog", b =>

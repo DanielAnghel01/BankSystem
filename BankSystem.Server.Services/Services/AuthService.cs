@@ -175,17 +175,6 @@ namespace BankSystem.Server.Services.Services
             try
             {
                 var user = await _bankRepository.Users.FirstOrDefaultAsync(u => u.Username == twoFactorServiceDto.Username);
-                    var auditError = new AuditError
-                    {
-                        UserId = null, // No user ID at login
-                        Action = "Login",
-                        Description = "Invalid username or password.",
-                        Timestamp = DateTime.UtcNow
-                    };
-                    await _requestService.SaveAuditError(auditError);
-
-                    return HttpResult.Factory.Create(HttpStatusCode.BadRequest, null, "Username or Password is incorrect");
-                }
 
                 if(user.TwoFACode == twoFactorServiceDto.Code)
                 {
@@ -221,35 +210,9 @@ namespace BankSystem.Server.Services.Services
                     return HttpResult.Factory.Create(HttpStatusCode.OK, loginResponse);
                 }
                 return HttpResult.Factory.Create(HttpStatusCode.BadRequest, null, "Invalid 2FA code. Please try again.");
-
-            }
-                var loginResponse = new LoginResponseServiceDto
-                {
-                    Username = user.Username,
-                    Token = jwt
-                };
-                var auditLog = new AuditLog
-                {
-                    UserId = user.Id,
-                    Action = "Login",
-                    Timestamp = DateTime.UtcNow,
-                    Description = $"User {user.Username} logged in successfully"
-                };
-                await _requestService.SaveAuditLog(auditLog);
-
-                return HttpResult.Factory.Create(HttpStatusCode.OK, loginResponse);
             }
             catch (Exception ex)
             {
-                var auditError = new AuditError
-                {
-                    UserId = null, // No user ID at login
-                    Action = "Login",
-                    Description = $"Error during login: {ex.Message}",
-                    Timestamp = DateTime.UtcNow
-                };
-                await _requestService.SaveAuditError(auditError);
-
                 return HttpResult.Factory.Create(HttpStatusCode.InternalServerError, null, "Internal server error");
             }
         }

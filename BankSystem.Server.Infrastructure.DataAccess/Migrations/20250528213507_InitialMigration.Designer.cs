@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BankSystem.Server.Infrastructure.DataAccess.Migrations
 {
     [DbContext(typeof(BankDbContext))]
-    [Migration("20250414000048_InitialMigration")]
+    [Migration("20250528213507_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -25,6 +25,35 @@ namespace BankSystem.Server.Infrastructure.DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("BankSystem.Server.Domain.Entities.AuditError", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AUDIT_ERROR", "BANK");
+                });
 
             modelBuilder.Entity("BankSystem.Server.Domain.Entities.AuditLog", b =>
                 {
@@ -192,13 +221,28 @@ namespace BankSystem.Server.Infrastructure.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("TwoFACode")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("TwoFAEnabled")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", "BANK");
+                    b.ToTable("USER", "BANK");
+                });
+
+            modelBuilder.Entity("BankSystem.Server.Domain.Entities.AuditError", b =>
+                {
+                    b.HasOne("BankSystem.Server.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BankSystem.Server.Domain.Entities.AuditLog", b =>

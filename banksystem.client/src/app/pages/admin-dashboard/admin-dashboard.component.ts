@@ -89,6 +89,7 @@ export class AdminDashboardComponent implements OnInit {
 
       this.adminService.createAdvancedUser(formValues)
         .then(() => {
+          this.loadUsers()
         })
         .catch(error => {
           this.isLoading = false;
