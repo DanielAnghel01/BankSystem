@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { AuthorizeService } from '../Authorize/service/authorize.service';
 import { CommonModule } from '@angular/common';
+
 
 
 @Component({
@@ -21,19 +22,38 @@ import { CommonModule } from '@angular/common';
     MatButtonModule,
     RouterModule,
     MatCardModule,
-    CommonModule
+    CommonModule,
+    RouterModule
   ]
 })
 export class HomeComponent {
   username: string | null = null;
+  showTermsPopup: boolean = false;
 
-  constructor(private authService: AuthorizeService) { }
+  constructor(
+    private authService: AuthorizeService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.username = this.authService.getUsernameFromToken();
+    const accepted = localStorage.getItem('termsAccepted');
+    if (!accepted) {
+      this.showTermsPopup = true;
+    }
   }
 
   isLoggedIn(): boolean {
     return this.authService.isAuthenticated();
+  }
+
+  acceptTerms(): void {
+    localStorage.setItem('termsAccepted', 'true');
+    this.showTermsPopup = false;
+  }
+
+  rejectTerms(): void {
+    alert('You must accept the Terms and Conditions to use the platform.');
+    this.router.navigate(['/']); // Optional: adjust to a landing or exit route
   }
 }

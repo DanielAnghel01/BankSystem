@@ -31,6 +31,15 @@ namespace BankSystem.Server.Services.Services
         {
             if (transactionServiceDto.Amount <= 0)
             {
+                var auditError = new AuditError
+                {
+                    UserId = null,
+                    Action = "Transfer",
+                    Description = "Amount must be greater than zero.",
+                    Timestamp = DateTime.UtcNow
+                };
+                await _requestService.SaveAuditError(auditError);
+
                 return HttpResult.Factory.Create(HttpStatusCode.BadRequest, null, "Amount must be greater than zero.");
             }
 
@@ -41,11 +50,29 @@ namespace BankSystem.Server.Services.Services
 
             if (sender == null || receiver == null)
             {
+                var auditError = new AuditError
+                {
+                    UserId = sender?.UserId ?? receiver?.UserId,
+                    Action = "Transfer",
+                    Description = "Sender or receiver account not found.",
+                    Timestamp = DateTime.UtcNow
+                };
+                await _requestService.SaveAuditError(auditError);
+
                 return HttpResult.Factory.Create(HttpStatusCode.NotFound, null, "Sender or receiver account not found.");
             }
 
             if (sender.Balance < transactionServiceDto.Amount)
             {
+                var auditError = new AuditError
+                {
+                    UserId = sender.UserId,
+                    Action = "Transfer",
+                    Description = "Insufficient balance in sender account.",
+                    Timestamp = DateTime.UtcNow
+                };
+                await _requestService.SaveAuditError(auditError);
+
                 return HttpResult.Factory.Create(HttpStatusCode.BadRequest, null, "Insufficient balance in sender account.");
             }
 
@@ -59,6 +86,15 @@ namespace BankSystem.Server.Services.Services
             decimal reciverRate = 1;
             if (response.StatusCode != HttpStatusCode.UnprocessableContent)
             {
+                var auditError = new AuditError
+                {
+                    UserId = sender.UserId,
+                    Action = "Transfer",
+                    Description = $"Error fetching exchange rate: {response.Content}",
+                    Timestamp = DateTime.UtcNow
+                };
+                await _requestService.SaveAuditError(auditError);
+
                 var rate = JsonConvert.DeserializeObject<RatesServiceDto>(response.Content);
                 reciverRate = rate.Rates[receiver.Currency];
             }
@@ -89,6 +125,15 @@ namespace BankSystem.Server.Services.Services
 
                 await _bankRepository.SaveChangesAsync();
 
+                var auditLog = new AuditLog
+                {
+                    UserId = sender.UserId,
+                    Action = "Transfer",
+                    Timestamp = DateTime.UtcNow,
+                    Description = $"Transferred {transactionServiceDto.Amount} from {sender.AccountNumber} to {receiver.AccountNumber}."
+                };
+                await _requestService.SaveAuditLog(auditLog);
+
                 return HttpResult.Factory.Create(HttpStatusCode.OK, new
                 {
                     message = "Transfer successful",
@@ -98,6 +143,15 @@ namespace BankSystem.Server.Services.Services
             }
             catch (Exception ex)
             {
+                var auditError = new AuditError
+                {
+                    UserId = sender.UserId,
+                    Action = "Transfer",
+                    Description = $"Error during transfer: {ex.Message}",
+                    Timestamp = DateTime.UtcNow
+                };
+                await _requestService.SaveAuditError(auditError);
+
                 return HttpResult.Factory.Create(HttpStatusCode.InternalServerError, null, $"Error processing transfer: {ex.Message}");
             }
         }
@@ -105,6 +159,15 @@ namespace BankSystem.Server.Services.Services
         {
             if (string.IsNullOrEmpty(userId))
             {
+                var auditError = new AuditError
+                {
+                    UserId = null,
+                    Action = "GetTransactionsByUser",
+                    Description = "User ID cannot be null or empty.",
+                    Timestamp = DateTime.UtcNow
+                };
+                await _requestService.SaveAuditError(auditError);
+
                 return HttpResult.Factory.Create(HttpStatusCode.BadRequest, null, "User ID cannot be null or empty.");
             }
             var transactions = await _bankRepository.Transactions
@@ -115,6 +178,15 @@ namespace BankSystem.Server.Services.Services
             var transactionHistories = new List<TransactionHistoryServiceDto>();
             if (transactions == null || !transactions.Any())
             {
+                var auditError = new AuditError
+                {
+                    UserId = long.Parse(userId),
+                    Action = "GetTransactionsByUser",
+                    Description = "No transactions found for the user.",
+                    Timestamp = DateTime.UtcNow
+                };
+                await _requestService.SaveAuditError(auditError);
+
                 return HttpResult.Factory.Create(HttpStatusCode.NotFound, null, "No transactions found for this user.");
             }
             else
@@ -153,6 +225,15 @@ namespace BankSystem.Server.Services.Services
                     transactionHistories.Add(transactionHistory);
                 }
             }
+            var auditLog = new AuditLog
+            {
+                UserId = long.Parse(userId),
+                Action = "GetTransactionsByUser",
+                Timestamp = DateTime.UtcNow,
+                Description = $"Retrieved transactions for user with ID {userId}."
+            };
+            await _requestService.SaveAuditLog(auditLog);
+
             return HttpResult.Factory.Create(HttpStatusCode.OK, transactionHistories);
         }
         public async Task<HttpResult> Deposit(DepositServiceDto depositServiceDto)
@@ -164,10 +245,21 @@ namespace BankSystem.Server.Services.Services
 
                 if (reciverAccount == null)
                 {
+                    var auditError = new AuditError
+                    {
+                        UserId = long.Parse(depositServiceDto.UserId),
+                        Action = "Deposit",
+                        Description = "Account not found.",
+                        Timestamp = DateTime.UtcNow
+                    };
+                    await _requestService.SaveAuditError(auditError);
+
                     return HttpResult.Factory.Create(HttpStatusCode.NotFound, null, "Account not found.");
                 }
                 reciverAccount.Balance += depositServiceDto.Amount;
+
                 _bankRepository.BankAccounts.Update(reciverAccount);
+
                 _bankRepository.Transactions.Add(new Transaction
                 {
                     ReciverAccountId = reciverAccount.UserId,
@@ -179,6 +271,16 @@ namespace BankSystem.Server.Services.Services
                 });
                 await _bankRepository.SaveChangesAsync();
 
+                var auditLog = new AuditLog
+                {
+                    UserId = reciverAccount.UserId,
+                    Action = "Deposit",
+                    Timestamp = DateTime.UtcNow,
+                    Description = $"Deposited {depositServiceDto.Amount} to account {depositServiceDto.AccountNumber}."
+                };
+
+                await _requestService.SaveAuditLog(auditLog);
+
                 return HttpResult.Factory.Create(HttpStatusCode.OK, new
                 {
                     message = "Deposit successful",
@@ -187,6 +289,15 @@ namespace BankSystem.Server.Services.Services
             }
             catch (Exception ex)
             {
+                var auditError = new AuditError
+                {
+                    UserId = long.Parse(depositServiceDto.UserId),
+                    Action = "Deposit",
+                    Description = $"Error during deposit: {ex.Message}",
+                    Timestamp = DateTime.UtcNow
+                };
+                await _requestService.SaveAuditError(auditError);
+
                 return HttpResult.Factory.Create(HttpStatusCode.InternalServerError, null, "Internal server error!");
             }
         }
@@ -199,6 +310,15 @@ namespace BankSystem.Server.Services.Services
 
                 if (reciverAccount == null)
                 {
+                    var auditError = new AuditError
+                    {
+                        UserId = long.Parse(withdrawServiceDto.UserId),
+                        Action = "Withdraw",
+                        Description = "Account not found.",
+                        Timestamp = DateTime.UtcNow
+                    };
+                    await _requestService.SaveAuditError(auditError);
+
                     return HttpResult.Factory.Create(HttpStatusCode.NotFound, null, "Account not found.");
                 }
                 reciverAccount.Balance -= withdrawServiceDto.Amount;
@@ -214,6 +334,16 @@ namespace BankSystem.Server.Services.Services
                 });
                 await _bankRepository.SaveChangesAsync();
 
+                var auditLog = new AuditLog
+                {
+                    UserId = reciverAccount.UserId,
+                    Action = "Withdraw",
+                    Timestamp = DateTime.UtcNow,
+                    Description = $"Withdrew {withdrawServiceDto.Amount} from account {withdrawServiceDto.AccountNumber}."
+                };
+
+                await _requestService.SaveAuditLog(auditLog);
+
                 return HttpResult.Factory.Create(HttpStatusCode.OK, new
                 {
                     message = "Withdraw successful",
@@ -222,6 +352,15 @@ namespace BankSystem.Server.Services.Services
             }
             catch (Exception ex)
             {
+                var auditError = new AuditError
+                {
+                    UserId = long.Parse(withdrawServiceDto.UserId),
+                    Action = "Withdraw",
+                    Description = $"Error during withdrawal: {ex.Message}",
+                    Timestamp = DateTime.UtcNow
+                };
+                await _requestService.SaveAuditError(auditError);
+
                 return HttpResult.Factory.Create(HttpStatusCode.InternalServerError, null, "Internal server error!");
             }
         }

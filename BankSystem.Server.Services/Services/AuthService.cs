@@ -34,6 +34,15 @@ namespace BankSystem.Server.Services.Services
             if (string.IsNullOrWhiteSpace(registerServiceDto.Username) ||
                 string.IsNullOrWhiteSpace(registerServiceDto.Password))
             {
+                var auditError = new AuditError
+                {
+                    UserId = null, // No user ID at registration
+                    Action = "Register",
+                    Description = "Invalid registration request: all fields are required.",
+                    Timestamp = DateTime.UtcNow
+                };
+                await _requestService.SaveAuditError(auditError);
+
                 return HttpResult.Factory.Create(HttpStatusCode.BadRequest, null, "All fields are required.");
             }
 
@@ -54,9 +63,25 @@ namespace BankSystem.Server.Services.Services
             }
             catch (Exception ex)
             {
+                var auditError = new AuditError
+                {
+                    UserId = null, // No user ID at registration
+                    Action = "Register",
+                    Description = $"Error saving user: {ex.Message}",
+                    Timestamp = DateTime.UtcNow
+                };
+                await _requestService.SaveAuditError(auditError);
 
                 return HttpResult.Factory.Create(HttpStatusCode.InternalServerError, null, $"Error saving user: {ex.Message}");
             }
+            var auditLog = new AuditLog
+            {
+                UserId = user.Id,
+                Action = "Register",
+                Timestamp = DateTime.UtcNow,
+                Description = $"User {user.Username} registered successfully"
+            };
+            await _requestService.SaveAuditLog(auditLog);
 
             return HttpResult.Factory.Create(HttpStatusCode.Created, new { message = "Registration successful" });
         }
@@ -69,6 +94,15 @@ namespace BankSystem.Server.Services.Services
 
                 if (user == null)
                 {
+                    var auditError = new AuditError
+                    {
+                        UserId = null, // No user ID at login
+                        Action = "Login",
+                        Description = "Invalid username or password.",
+                        Timestamp = DateTime.UtcNow
+                    };
+                    await _requestService.SaveAuditError(auditError);
+
                     return HttpResult.Factory.Create(HttpStatusCode.BadRequest, null, "Username or Password is incorrect");
                 }
 
@@ -100,11 +134,28 @@ namespace BankSystem.Server.Services.Services
                     Username = user.Username,
                     Token = jwt
                 };
+                var auditLog = new AuditLog
+                {
+                    UserId = user.Id,
+                    Action = "Login",
+                    Timestamp = DateTime.UtcNow,
+                    Description = $"User {user.Username} logged in successfully"
+                };
+                await _requestService.SaveAuditLog(auditLog);
+
                 return HttpResult.Factory.Create(HttpStatusCode.OK, loginResponse);
             }
             catch (Exception ex)
             {
-                //_logger.Error(ex);
+                var auditError = new AuditError
+                {
+                    UserId = null, // No user ID at login
+                    Action = "Login",
+                    Description = $"Error during login: {ex.Message}",
+                    Timestamp = DateTime.UtcNow
+                };
+                await _requestService.SaveAuditError(auditError);
+
                 return HttpResult.Factory.Create(HttpStatusCode.InternalServerError, null, "Internal server error");
             }
         }

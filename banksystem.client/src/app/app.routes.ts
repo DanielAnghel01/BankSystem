@@ -85,6 +85,20 @@ export const routes: Routes = [
     data: { title: 'dashboard' },
     canActivate: [AuthGuard]
   },
+  {
+    path: 'terms-and-conditions',
+    //component: TransactionComponent,
+    loadComponent: () => import('./pages/terms-and-conditions/terms-and-conditions.component').then(m => m.TermsAndConditionsComponent),
+    data: { title: 'Terms&Conditions' },
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'privacy',
+    //component: TransactionComponent,
+    loadComponent: () => import('./pages/privacy/privacy.component').then(m => m.PrivacyComponent),
+    data: { title: 'Privacy Policy' },
+    canActivate: [AuthGuard]
+  },
 
   {
     path: '**',
