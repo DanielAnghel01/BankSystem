@@ -56,5 +56,29 @@ namespace BankSystem.Server.Services.Services
                 throw ex;
             }
         }
+        public async Task SaveAuditLog(AuditLog log)
+        {
+            try
+            {
+                _bankRepository.AuditLogs.Add(log);
+                await _bankRepository.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task SaveAuditError(AuditError error)
+        {
+            try
+            {
+                _bankRepository.AuditErrors.Add(error);
+                await _bankRepository.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

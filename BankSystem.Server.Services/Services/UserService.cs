@@ -29,6 +29,15 @@ namespace BankSystem.Server.Services.Services
             var user = await _bankDbContext.Users.FirstOrDefaultAsync(e => e.Id.ToString() == userId);
             if (user == null)
             {
+                var auditError = new AuditError
+                {
+                    UserId = (long)Convert.ToDouble(userId),
+                    Action = "GetUserProfile",
+                    Description = "User not found",
+                    Timestamp = DateTime.UtcNow
+                };
+                await _requestService.SaveAuditError(auditError);
+
                 return HttpResult.Factory.Create(HttpStatusCode.BadRequest, null, "User not found");
             }
 
@@ -39,6 +48,17 @@ namespace BankSystem.Server.Services.Services
                 User = user,
                 BankAccounts = bankAccounts
             };
+
+            var auditLog = new AuditLog
+            {
+                UserId = user.Id,
+                Action = "GetUserProfile",
+                Timestamp = DateTime.UtcNow,
+                Description = $"Retrieved profile for user {userId}"
+            };
+
+            await _requestService.SaveAuditLog(auditLog);
+
             return HttpResult.Factory.Create(HttpStatusCode.OK, userProfile);
         }
         public async Task<HttpResult> GetAllUsers()

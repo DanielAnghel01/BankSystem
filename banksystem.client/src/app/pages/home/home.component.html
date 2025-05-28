@@ -1,3 +1,16 @@
+<div *ngIf="showTermsPopup" class="terms-popup-overlay">
+  <div class="terms-popup-box">
+    <h2>📜 Terms & Conditions</h2>
+    <p>You must read and accept our Terms and Conditions to continue using Rock Solid Bank.</p>
+    <div class="popup-buttons">
+      <button mat-flat-button color="primary" (click)="acceptTerms()">✅ Accept</button>
+      <button mat-stroked-button color="warn" (click)="rejectTerms()">❌ Reject</button>
+      <button mat-button color="accent" routerLink="/terms-and-conditions">📄 View Terms</button>
+    </div>
+  </div>
+</div>
+
+
 <!-- Header (Top Nav Bar) -->
 <header class="app-toolbar">
   <div class="app-title">Rock Solid</div>
@@ -67,5 +80,5 @@
 <footer class="app-footer">
   &copy; 2025 - Rock Solid -
   <a routerLink="/privacy">Privacy</a> -
-  <a routerLink="/terms">Terms of Use</a>
+  <a routerLink="/terms-and-conditions">Terms&Conditions</a>
 </footer>

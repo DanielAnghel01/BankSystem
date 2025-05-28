@@ -22,6 +22,7 @@ namespace BankSystem.Server.Infrastructure.DataAccess
         public DbSet<User> Users { get; set; }
         public DbSet<LoginToken> LoginTokens { get; set; }
         public DbSet<AuditLog> AuditLogs { get; set; }
+        public DbSet<AuditError> AuditErrors { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -34,6 +35,7 @@ namespace BankSystem.Server.Infrastructure.DataAccess
             modelBuilder.ApplyConfiguration(new LoginTokenTypeConfiguration());
             modelBuilder.ApplyConfiguration(new TransactionTypeConfiguration());
             modelBuilder.ApplyConfiguration(new UserTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new AuditErrorsTypeConfiguration());
         }
     }
 }
