@@ -13,6 +13,7 @@ namespace BankSystem.Server.MappingProfile
             CreateMap<RegisterDto, RegisterServiceDto>();
             CreateMap<CreateBankAccountDto, CreateBankAccountServiceDto>();
             CreateMap<TransactionDto, TransactionServiceDto>();
+            CreateMap<TwoFactorDto, TwoFactorServiceDto>();
         }
     }
 }

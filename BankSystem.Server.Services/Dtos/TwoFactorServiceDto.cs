@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace BankSystem.Server.Services.Dtos
 {
-    public class LoginResponseServiceDto
+    public class TwoFactorServiceDto
     {
-        public string Token { get; set; }
         public string Username { get; set; }
-        public bool TwoFAEnabled { get; set; }
+        public string Code { get; set; }
     }
 }

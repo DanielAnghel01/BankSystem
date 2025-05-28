@@ -85,6 +85,19 @@ export const routes: Routes = [
     data: { title: 'dashboard' },
     canActivate: [AuthGuard]
   },
+  {
+    path: 'acces-denied',
+    //component: TransactionComponent,
+    loadComponent: () => import('./pages/Authorize/acces-denied/acces-denied.component').then(m => m.AccesDeniedComponent),
+    data: { title: 'acces-denied' }
+  },
+  {
+    path: 'admin',
+    //component: TransactionComponent,
+    loadComponent: () => import('./pages/admin-dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent),
+    data: { title: 'admin', roles: ['admin'] },
+    canActivate: [AuthGuard]
+  },
 
   {
     path: '**',

@@ -13,6 +13,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 import { HttpStatusCode } from '@angular/common/http';
+import { MatDialog } from '@angular/material/dialog';
+import { TwoFactorComponent } from '../two-factor/two-factor.component';
 
 @Component({
   standalone: true,
@@ -38,7 +40,8 @@ export class LoginComponent implements OnInit {
     private authorizeService: AuthorizeService,
     private localStorageService: LocalStorageService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -76,18 +79,23 @@ export class LoginComponent implements OnInit {
       this.authorizeService.login(loginModel).then((response: Response<TokenModel>) => {
         if (response.statusCode == HttpStatusCode.Ok) {
           console.log(response);
-          this.errorMessage = '';
-          //const isSaved: boolean = this.saveDataToLocalStorage(response.content.token);
-          //console.log(isSaved);
-          //if (isSaved) {
-           this.router.navigate(['home']);
-          //}
-          //this.progressBar.mode = 'determinate';
+          if (response.content.twoFAEnabled) {
+            this.open2FADialog(loginModel.username);
+          }
+          else {
+            this.errorMessage = '';
+            this.router.navigate(['home']);
+            this.progressBar.mode = 'determinate';
+          }
         }
       }).catch((response: any) => {
         switch (response.status) {
           case 400:
+            alert('Incorrect credentials. Please try again');
             this.errorMessage = 'Incorrect credentials. Please try again';
+            break;
+          case 401:
+            alert('User is not active please contact customer support!');
             break;
           default:
             this.errorMessage = 'Server error. Please try again later';
@@ -97,7 +105,20 @@ export class LoginComponent implements OnInit {
       });
     }
   }
+  open2FADialog(username: string): void {
+    const dialogRef = this.dialog.open(TwoFactorComponent, {
+      width: '400px',
+      data: { username: username }
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result?.success && result.token) {
+          this.router.navigate(['/home']);
+      } else {
+        this.errorMessage = '2FA failed. Please try again.';
+      }
+    });
+  }
   saveDataToLocalStorage(token: any): boolean {
     let result: boolean = false;
     if (token) {
@@ -112,6 +133,7 @@ export class LoginComponent implements OnInit {
 
         this.localStorageService.set('token', token);
         this.localStorageService.set('username', username);
+        //this.localStorageService.set('role', role);
 
         result = true;
       } catch (e) {

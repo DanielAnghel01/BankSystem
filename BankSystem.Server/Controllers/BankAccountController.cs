@@ -4,6 +4,7 @@ using BankSystem.Server.Dtos;
 using BankSystem.Server.Infrastructure.DataAccess;
 using BankSystem.Server.Services.Dtos;
 using BankSystem.Server.Services.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
@@ -22,7 +23,7 @@ namespace BankSystem.Server.Controllers
             _mapper = mapper;
             _bankAccountService = bankAccountService;
         }
-
+        
         [HttpPost("create")]
         public async Task<IActionResult> CreateAccount([FromBody] CreateBankAccountDto accountDto)
         {

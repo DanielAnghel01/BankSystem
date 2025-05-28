@@ -1,0 +1,149 @@
+<div class="dashboard-container mat-typography">
+
+  <mat-card>
+    <mat-card-title>Admin Dashboard</mat-card-title>
+    <mat-card-subtitle>Manage users with roles 'user' and 'pb'</mat-card-subtitle>
+  </mat-card>
+
+  <!-- Users Table -->
+  <mat-card class="user-table-card">
+    <mat-card-title>Users List</mat-card-title>
+
+    <table mat-table [dataSource]="users" class="mat-elevation-z8">
+
+      <!-- Full Name Column -->
+      <ng-container matColumnDef="fullName">
+        <th mat-header-cell *matHeaderCellDef>Full Name</th>
+        <td mat-cell *matCellDef="let user">{{ user?.fullName }}</td>
+      </ng-container>
+
+      <!-- Email Column -->
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef>Email</th>
+        <td mat-cell *matCellDef="let user">{{ user?.email }}</td>
+      </ng-container>
+
+      <!-- Role Column -->
+      <ng-container matColumnDef="role">
+        <th mat-header-cell *matHeaderCellDef>Role</th>
+        <td mat-cell *matCellDef="let user">{{ user?.role }}</td>
+      </ng-container>
+
+      <!-- Status Column -->
+      <ng-container matColumnDef="active">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let user">
+          <span [ngClass]="user.isActive ? 'status-active' : 'status-inactive'">
+            {{ user?.isActive ? 'Active' : 'Inactive' }}
+          </span>
+        </td>
+      </ng-container>
+
+      <!-- Status Column -->
+      <ng-container matColumnDef="activeFA">
+        <th mat-header-cell *matHeaderCellDef>2FA</th>
+        <td mat-cell *matCellDef="let user">
+          <span [ngClass]="user.twoFAEnabled ? 'status-active' : 'status-inactive'">
+            {{ user?.twoFAEnabled ? 'Active' : 'Inactive' }}
+          </span>
+        </td>
+      </ng-container>
+
+      <!-- Action Column -->
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>Action</th>
+        <td mat-cell *matCellDef="let user">
+          <button mat-mini-fab color="warn" aria-label="Deactivate user"
+                  (click)="deactivateUser(user.id)" [disabled]="!user.isActive" matTooltip="Deactivate User">
+            <mat-icon>block</mat-icon>
+          </button>
+          <button mat-mini-fab color="green" aria-label="Activate user"
+                  (click)="activateUser(user.id)" [disabled]="user.isActive" matTooltip="Activate User">
+            <mat-icon>check_circle</mat-icon>
+          </button>
+          <button mat-mini-fab color="primary" aria-label="Activate user"
+                  (click)="twoFactor(user.id)" [disabled]="!user.isActive" matTooltip="2FA">
+            <mat-icon>lock</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="['fullName', 'email', 'role', 'active', 'activeFA' , 'action']"></tr>
+      <tr mat-row *matRowDef="let row; columns: ['fullName', 'email', 'role', 'active','activeFA' , 'action'];"></tr>
+    </table>
+  </mat-card>
+
+  <!-- Create User Form -->
+  <mat-card class="create-user-card">
+    <mat-card-title>Create New User</mat-card-title>
+
+    <form [formGroup]="registerForm" (ngSubmit)="createUser()" class="create-form">
+
+      <mat-form-field appearance="fill" class="form-field">
+        <mat-label>Full Name</mat-label>
+        <input matInput formControlName="fullName" placeholder="John Doe" required />
+        <mat-error *ngIf="registerForm.get('fullName')?.hasError('required')">
+          Full Name is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="form-field">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" placeholder="john@example.com" required />
+        <mat-error *ngIf="registerForm.get('email')?.hasError('required')">Email is required</mat-error>
+        <mat-error *ngIf="registerForm.get('email')?.hasError('email')">Invalid email format</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="form-field">
+        <mat-label>Date of Birth</mat-label>
+        <input matInput type="date" formControlName="dateOfBirth" required />
+        <mat-error *ngIf="registerForm.get('dateOfBirth')?.hasError('required')">Date of Birth is required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="form-field">
+        <mat-label>Username</mat-label>
+        <input matInput formControlName="username" placeholder="username" required />
+        <mat-error *ngIf="registerForm.get('username')?.hasError('required')">Username is required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="form-field">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" formControlName="password" required minlength="6" />
+        <mat-error *ngIf="registerForm.get('password')?.hasError('required')">Password is required</mat-error>
+        <mat-error *ngIf="registerForm.get('password')?.hasError('minlength')">
+          Password must be at least 6 characters
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="form-field">
+        <mat-label>Confirm Password</mat-label>
+        <input matInput type="password" formControlName="confirmPassword" required />
+        <mat-error *ngIf="registerForm.get('confirmPassword')?.hasError('required')">
+          Confirmation is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="form-field">
+        <mat-label>Role</mat-label>
+        <mat-select formControlName="role" required>
+          <mat-option value="user">User</mat-option>
+          <mat-option value="pb">PB</mat-option>
+          <mat-option value="admin">Admin</mat-option>
+        </mat-select>
+        <mat-error *ngIf="registerForm.get('role')?.hasError('required')">Role is required</mat-error>
+      </mat-form-field>
+
+      <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="registerForm.invalid">
+        <mat-icon>person_add</mat-icon> Create User
+      </button>
+
+      <button mat-stroked-button color="warn" type="button" (click)="registerForm.reset()">
+        <mat-icon>refresh</mat-icon> Reset
+      </button>
+
+    </form>
+  </mat-card>
+
+</div>

@@ -8,6 +8,7 @@
     <a routerLink="/transfer">💸 Transfer Funds</a>
     <a routerLink="/exchange-rates">📊 Exchange Rates</a>
     <a routerLink="/user">👤 Profile</a>
+    <a *ngIf="isAdminIn()" routerLink="/admin">📊 Admin Dashboard</a>
   </nav>
 
   <div *ngIf="isLoggedIn()" class="text-white font-bold">

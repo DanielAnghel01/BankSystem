@@ -29,5 +29,29 @@ namespace BankSystem.Server.Controllers
             var result = await _userService.GetUserProfile(userId);
             return StatusCode(result.StatusCode, result.Content);
         }
+        [HttpGet("get-users")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var result = await _userService.GetAllUsers();
+            return StatusCode(result.StatusCode, result.Content);
+        }
+        [HttpPost("deactivate/{userId}")]
+        public async Task<IActionResult> DeactivateUser(int userId)
+        {
+            var result = await _userService.DeactivateUser(userId);
+            return StatusCode(result.StatusCode, result.Content);
+        }
+        [HttpPost("activate/{userId}")]
+        public async Task<IActionResult> ActivateUser(int userId)
+        {
+            var result = await _userService.ActivateUser(userId);
+            return StatusCode(result.StatusCode, result.Content);
+        }
+        [HttpPost("tfa/{userId}")]
+        public async Task<IActionResult> TwoFactor(int userId)
+        {
+            var result = await _userService.TwoFactor(userId);
+            return StatusCode(result.StatusCode, result.Content);
+        }
     }
 }

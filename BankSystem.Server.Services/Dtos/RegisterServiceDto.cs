@@ -21,6 +21,7 @@ namespace BankSystem.Server.Services.Dtos
 
         [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; }
+        public string? Role { get; set; }
         public DateTime DateOfBirth { get; set; }
         public DateTime CreatedAt { get; set; }
     }

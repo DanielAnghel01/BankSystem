@@ -27,6 +27,10 @@ export class BankAccountService {
   }
 
   createAccount(account: BankAccountModel): Observable<BankAccountModel> {
-    return this.http.post<BankAccountModel>(`${this.apiUrl}/create`, account);
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.localStorageService.get('SESSION_TOKEN')}`
+    });
+    return this.http.post<BankAccountModel>(`${this.apiUrl}/create`, account, {headers});
   }
 }

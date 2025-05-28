@@ -26,14 +26,22 @@ import { CommonModule } from '@angular/common';
 })
 export class HomeComponent {
   username: string | null = null;
+  role: string | null = null;
 
   constructor(private authService: AuthorizeService) { }
 
   ngOnInit(): void {
     this.username = this.authService.getUsernameFromToken();
+    this.role = this.authService.getRoleFromToken();
   }
 
   isLoggedIn(): boolean {
     return this.authService.isAuthenticated();
+  }
+  isAdminIn(): boolean {
+    if (this.role == 'admin') {
+      return true
+    }
+    return false; 
   }
 }

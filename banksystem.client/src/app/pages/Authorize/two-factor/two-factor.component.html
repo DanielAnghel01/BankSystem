@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Two-Factor Authentication</h2>
+
+<div mat-dialog-content>
+  <p>Please enter the 6-digit verification code sent to your email for user <strong>{{ data.username }}</strong>.</p>
+
+  <mat-form-field appearance="fill" style="width: 100%;">
+    <mat-label>Verification Code</mat-label>
+    <input matInput
+           type="text"
+           maxlength="6"
+           [(ngModel)]="code"
+           autocomplete="one-time-code"
+           pattern="[0-9]*"
+           inputmode="numeric" />
+  </mat-form-field>
+
+  <div *ngIf="error" style="color: red; margin-top: 8px;">
+    {{ error }}
+  </div>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="dialogRef.close()">Cancel</button>
+  <button mat-flat-button color="primary" (click)="submit()" [disabled]="code.length !== 6">Verify</button>
+</div>

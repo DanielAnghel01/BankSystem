@@ -32,8 +32,6 @@ namespace BankSystem.Server.Controllers
 
             return StatusCode(result.StatusCode, result.Content);
         }
-
-
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody]LoginDto loginDto)
         {
@@ -46,6 +44,27 @@ namespace BankSystem.Server.Controllers
             {
                 return StatusCode(result.StatusCode, result.ErrorMessage);
             }
+        }
+        [HttpPost("verify-2fa")]
+        public async Task<IActionResult> Verify2FA([FromBody] TwoFactorDto twoFactorDto)
+        {
+            var result = await _authService.Verify2FA(_mapper.Map<TwoFactorServiceDto>(twoFactorDto));
+            if (result.StatusCode == (int)HttpStatusCode.OK)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return StatusCode(result.StatusCode, result.ErrorMessage);
+            }
+        }
+        [HttpPost("admin/create")]
+        public async Task<IActionResult> CreateAdvancedUser(RegisterDto registerDto)
+        {
+            var result = await _authService.RegisterAsync(_mapper.Map<RegisterServiceDto>(registerDto));
+            if (result.StatusCode >= 400)
+                return StatusCode(result.StatusCode, new { error = result.ErrorMessage });
+            return StatusCode(result.StatusCode, result.Content);
         }
     }
 }
