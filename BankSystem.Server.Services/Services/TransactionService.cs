@@ -262,8 +262,8 @@ namespace BankSystem.Server.Services.Services
 
                 _bankRepository.Transactions.Add(new Transaction
                 {
-                    ReciverAccountId = reciverAccount.UserId,
-                    SenderAccountId = reciverAccount.UserId,
+                    ReciverAccountId = reciverAccount.Id,
+                    SenderAccountId = reciverAccount.Id,
                     Amount = depositServiceDto.Amount,
                     TransactionType = "deposit",
                     Date = DateTime.UtcNow,
@@ -325,8 +325,8 @@ namespace BankSystem.Server.Services.Services
                 _bankRepository.BankAccounts.Update(reciverAccount);
                 _bankRepository.Transactions.Add(new Transaction
                 {
-                    ReciverAccountId = reciverAccount.UserId,
-                    SenderAccountId = reciverAccount.UserId,
+                    ReciverAccountId = reciverAccount.Id,
+                    SenderAccountId = reciverAccount.Id,
                     Amount = withdrawServiceDto.Amount,
                     TransactionType = "withdrawal",
                     Date = DateTime.UtcNow,

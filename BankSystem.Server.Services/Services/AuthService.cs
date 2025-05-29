@@ -83,7 +83,6 @@ namespace BankSystem.Server.Services.Services
             {
                 var auditError = new AuditError
                 {
-                    UserId = null, // No user ID at registration
                     Action = "Register",
                     Description = $"Error saving user: {ex.Message}",
                     Timestamp = DateTime.UtcNow
