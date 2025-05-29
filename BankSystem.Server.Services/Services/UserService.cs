@@ -31,14 +31,13 @@ namespace BankSystem.Server.Services.Services
             {
                 var auditError = new AuditError
                 {
-                    UserId = (long)Convert.ToDouble(userId),
                     Action = "GetUserProfile",
                     Description = "User not found",
                     Timestamp = DateTime.UtcNow
                 };
                 await _requestService.SaveAuditError(auditError);
 
-                return HttpResult.Factory.Create(HttpStatusCode.BadRequest, null, "User not found");
+                return HttpResult.Factory.Create(HttpStatusCode.NotFound, null, "User not found");
             }
 
             var bankAccounts = await _bankDbContext.BankAccounts.Where(e => e.UserId.ToString() == userId).ToListAsync();

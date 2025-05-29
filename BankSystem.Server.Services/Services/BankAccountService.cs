@@ -57,7 +57,6 @@ namespace BankSystem.Server.Services.Services
             {
                 var auditError = new AuditError
                 {
-                    UserId = createAccountServiceDto.UserId,
                     Action = "CreateBankAccount",
                     Description = $"Error saving account: {ex.Message}",
                     Timestamp = DateTime.UtcNow
@@ -89,7 +88,6 @@ namespace BankSystem.Server.Services.Services
                     createdAt = account.CreatedAt
                 });
         }
-
         public async Task<HttpResult> GetAccountByUser(string userId)
         {
             try
@@ -100,7 +98,6 @@ namespace BankSystem.Server.Services.Services
                 {
                     var auditError = new AuditError
                     {
-                        UserId = Convert.ToInt64(userId),
                         Action = "GetAccountByUser",
                         Description = "No bank accounts found for the user.",
                         Timestamp = DateTime.UtcNow
