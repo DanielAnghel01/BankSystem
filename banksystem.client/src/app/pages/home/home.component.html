@@ -77,8 +77,11 @@
 </main>
 
 <!-- Footer -->
-<footer class="app-footer">
-  &copy; 2025 - Rock Solid -
-  <a routerLink="/privacy">Privacy</a> -
-  <a routerLink="/terms-and-conditions">Terms&Conditions</a>
+<footer class="app-footer mat-elevation-z4">
+  <mat-toolbar color="primary" class="footer-toolbar">
+    <span>&copy; 2025 - Rock Solid</span>
+    <span class="spacer"></span>
+    <a mat-button routerLink="/privacy">Privacy</a>
+    <a mat-button routerLink="/terms-and-conditions">Terms & Conditions</a>
+  </mat-toolbar>
 </footer>
